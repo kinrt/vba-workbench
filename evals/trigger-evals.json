@@ -1,0 +1,100 @@
+{
+  "skill_name": "vba-workbench",
+  "description": "触发用例：应触发 12 条、不应触发 11 条。改 description 后先跑这一组，确认召回与误触发都稳定。",
+  "should_trigger": [
+    {
+      "query": "把「示例表」里的 VBA 抓到 src，我要提交 Git",
+      "why": "xlsm 抓取 + 源码入 Git"
+    },
+    {
+      "query": "源码改完了，帮我写回 xlsm 并跑一下宏",
+      "why": "push + run"
+    },
+    {
+      "query": "看看这个 xlsm 的 VBA 工程和 Git 里差在哪",
+      "why": "VBA 工程与源码对账"
+    },
+    {
+      "query": "删「表格工具」里这个方法前，查一下哪些项目在用",
+      "why": "members 引用检查"
+    },
+    {
+      "query": "公共模块是不是太肥了，哪些能下放",
+      "why": "common 瘦身评估"
+    },
+    {
+      "query": "提交前检查 VBA 命名和格式",
+      "why": "style check"
+    },
+    {
+      "query": "Excel 提示 VBA 工程信任访问被拒绝，怎么办",
+      "why": "VBE 权限/环境体检"
+    },
+    {
+      "query": "新电脑上这套 VBA 工程管家怎么初始化配置",
+      "why": "init 新机配置"
+    },
+    {
+      "query": "边改边自动写回表格，有没有 watch",
+      "why": "watch 自动写回"
+    },
+    {
+      "query": "把 vbaProject.bin 导出成模块文本",
+      "why": "VBA 导出/同步"
+    },
+    {
+      "query": "换新 xlsm 了，确认这个项目配到哪张表",
+      "why": "list 注册核对"
+    },
+    {
+      "query": "发布前帮我扫一遍脱敏词表，别把真实路径带进包",
+      "why": "scrub 发布脱敏检查"
+    }
+  ],
+  "should_not_trigger": [
+    {
+      "query": "VBA 里字典和集合哪个快",
+      "why": "纯语法/性能问答，不操作仓库"
+    },
+    {
+      "query": "Excel 宏怎么绑定按钮",
+      "why": "Excel 操作教学，不涉及源码同步"
+    },
+    {
+      "query": "帮我写一个 Python 脚本批量改 Excel 单元格",
+      "why": "非 VBA 源码同步"
+    },
+    {
+      "query": "WPS 里怎么启用宏",
+      "why": "明确不支持的平台"
+    },
+    {
+      "query": "Mac Excel 的 VBA 工程在哪",
+      "why": "明确不支持的平台"
+    },
+    {
+      "query": "这个 xlsm 打开密码忘了怎么破解",
+      "why": "非工具职责，且涉及绕过保护"
+    },
+    {
+      "query": "帮我对比两份销售报表的差异",
+      "why": "业务数据分析，不是 VBA 工程管家链"
+    },
+    {
+      "query": "把销售额预测写进 Excel",
+      "why": "业务数据写入，工具明确不做"
+    },
+    {
+      "query": "VBA 的 ByVal 和 ByRef 有什么区别",
+      "why": "语言概念问答"
+    },
+    {
+      "query": "推荐几个 VBA 学习视频",
+      "why": "资源推荐，不涉及本仓库"
+    },
+    {
+      "query": "把这个 xlsm 转成 PDF",
+      "why": "文件转换，不属于同步/审计"
+    }
+  ]
+}

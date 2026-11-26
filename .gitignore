@@ -1,0 +1,43 @@
+# ===== 用户配置与工作区：不入库 =====
+mapping.json
+mapping.local.json
+/src/
+.backup/
+releases/
+.lab/
+.run/
+.devloop/
+
+# ===== 测试与本机报告：不入库 =====
+tests/.devloop/
+tests/artifacts/
+
+# ===== Excel 二进制载体：一律不入库 =====
+*.xlsm
+*.xlsb
+*.xlam
+*.xlsx
+*.xls
+~$*
+*.bak
+
+# ===== Python =====
+__pycache__/
+*.pyc
+
+# ===== 同步盘冲突副本 =====
+*_Conflict*
+*-Conflict*
+*冲突*
+_synology_conflicts/
+
+# ===== 临时与系统文件 =====
+*.tmp
+*.log
+Thumbs.db
+.DS_Store
+
+# ===== 编辑器本地文件 =====
+.vscode/*
+!.vscode/settings.json
+.trae/

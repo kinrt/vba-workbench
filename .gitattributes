@@ -1,0 +1,25 @@
+# 属性文件自身：LF
+.gitattributes text eol=lf
+
+# VBA 源码：仓库内统一 LF
+*.bas text eol=lf
+*.cls text eol=lf
+*.frm text eol=lf
+*.vb  text eol=lf
+
+# 双击菜单批处理：CRLF，避免 Windows 上换行解析出错
+*.bat text eol=crlf
+
+# 窗体二进制资源
+*.frx binary
+
+# 配置、脚本、文档：LF
+*.json text eol=lf
+*.py   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.yml  text eol=lf
+VERSION text eol=lf
+.gitignore     text eol=lf
+.gitattributes text eol=lf
+LICENSE text eol=lf

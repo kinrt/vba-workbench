@@ -1,0 +1,968 @@
+{
+  "counts": {
+    "approved": 2,
+    "match": 38
+  },
+  "rows": [
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "align"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "keep",
+          "keep-tag"
+        ],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "keep",
+          "keep-tag"
+        ],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "clean-backup"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "args",
+      "new": [
+        "verify-package"
+      ],
+      "old": [],
+      "status": "approved",
+      "verb": "doctor"
+    },
+    {
+      "arg": "verify-package",
+      "argv": [],
+      "entry": "sync",
+      "field": "arg-added",
+      "new": {
+        "choices": [],
+        "default": false,
+        "kind": "flag",
+        "names": [
+          "verify-package"
+        ],
+        "required": false
+      },
+      "old": null,
+      "status": "approved",
+      "verb": "doctor"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "verify-package"
+        ],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "doctor"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": true,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": true,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "gbk-export"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "config",
+          "dir",
+          "lab",
+          "prefix",
+          "src"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "config",
+          "dir",
+          "lab",
+          "prefix",
+          "src"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "init"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "list"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "intent"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "intent"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "plan"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "module"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "module"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "promote"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": true,
+        "args": [
+          "no-backup"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": true,
+        "args": [
+          "no-backup"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "pull"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "no-backup"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "no-backup"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "pull-open"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": true,
+        "args": [
+          "doc-modules",
+          "no-backup",
+          "no-save",
+          "open-only",
+          "rollback-on-fail"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": true,
+        "args": [
+          "doc-modules",
+          "no-backup",
+          "no-save",
+          "open-only",
+          "rollback-on-fail"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "push"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "arg",
+          "isolate",
+          "log",
+          "log-optional",
+          "macro",
+          "push",
+          "rollback-on-fail",
+          "save",
+          "tail"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "arg",
+          "isolate",
+          "log",
+          "log-optional",
+          "macro",
+          "push",
+          "rollback-on-fail",
+          "save",
+          "tail"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "run"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "mode"
+        ],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "mode"
+        ],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "shells"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "vbamod"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "version"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "doc-modules",
+          "interval",
+          "no-backup",
+          "no-save",
+          "seconds",
+          "startup"
+        ],
+        "json": false,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "doc-modules",
+          "interval",
+          "no-backup",
+          "no-save",
+          "seconds",
+          "startup"
+        ],
+        "json": false,
+        "project": true
+      },
+      "status": "match",
+      "verb": "watch"
+    },
+    {
+      "argv": [],
+      "entry": "audit",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "md",
+          "out"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "md",
+          "out"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "common"
+    },
+    {
+      "argv": [],
+      "entry": "audit",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "ignore",
+          "md",
+          "out",
+          "strict"
+        ],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "ignore",
+          "md",
+          "out",
+          "strict"
+        ],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "indicators"
+    },
+    {
+      "argv": [],
+      "entry": "audit",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "md",
+          "module",
+          "out"
+        ],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "md",
+          "module",
+          "out"
+        ],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "members"
+    },
+    {
+      "argv": [],
+      "entry": "audit",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "ignore",
+          "md",
+          "out",
+          "strict"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "ignore",
+          "md",
+          "out",
+          "strict"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "overview"
+    },
+    {
+      "argv": [],
+      "entry": "audit",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "md",
+          "out"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "md",
+          "out"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "project"
+    },
+    {
+      "argv": [],
+      "entry": "audit",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "ignore",
+          "md",
+          "out",
+          "strict"
+        ],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "all",
+          "exclude",
+          "ignore",
+          "md",
+          "out",
+          "strict"
+        ],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "structure"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "baseline",
+          "clear",
+          "log",
+          "macro",
+          "sheet",
+          "timeout"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "baseline",
+          "clear",
+          "log",
+          "macro",
+          "sheet",
+          "timeout"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "assert"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "tag"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "tag"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "backup"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "action"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "action"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "book"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "log",
+          "tail"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "log",
+          "tail"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "logs"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "out"
+        ],
+        "json": true,
+        "project": false
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "out"
+        ],
+        "json": true,
+        "project": false
+      },
+      "status": "match",
+      "verb": "metrics"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "file",
+          "no-style"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "file",
+          "no-style"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "patch"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "strict"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "strict"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "probe"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "push"
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "surface",
+      "new": {
+        "all_project": false,
+        "args": [
+          "action",
+          "scope",
+          "which"
+        ],
+        "json": true,
+        "project": true
+      },
+      "old": {
+        "all_project": false,
+        "args": [
+          "action",
+          "scope",
+          "which"
+        ],
+        "json": true,
+        "project": true
+      },
+      "status": "match",
+      "verb": "style"
+    },
+    {
+      "argv": [],
+      "entry": "sync",
+      "field": "scenario",
+      "new": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "old": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "status": "match",
+      "verb": ""
+    },
+    {
+      "argv": [
+        "__baseline_no_such_verb__"
+      ],
+      "entry": "sync",
+      "field": "scenario",
+      "new": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "old": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "status": "match",
+      "verb": ""
+    },
+    {
+      "argv": [],
+      "entry": "audit",
+      "field": "scenario",
+      "new": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "old": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "status": "match",
+      "verb": ""
+    },
+    {
+      "argv": [
+        "__baseline_no_such_verb__"
+      ],
+      "entry": "audit",
+      "field": "scenario",
+      "new": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "old": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "status": "match",
+      "verb": ""
+    },
+    {
+      "argv": [],
+      "entry": "agent",
+      "field": "scenario",
+      "new": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "old": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "status": "match",
+      "verb": ""
+    },
+    {
+      "argv": [
+        "__baseline_no_such_verb__"
+      ],
+      "entry": "agent",
+      "field": "scenario",
+      "new": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "old": {
+        "envelope_keys": [],
+        "exit_code": 2
+      },
+      "status": "match",
+      "verb": ""
+    },
+    {
+      "argv": [
+        "version",
+        "--json"
+      ],
+      "entry": "sync",
+      "field": "scenario",
+      "new": {
+        "envelope_keys": [
+          "action",
+          "details",
+          "elapsed_ms",
+          "errors",
+          "exit_code",
+          "ok",
+          "stats",
+          "ts"
+        ],
+        "exit_code": 1
+      },
+      "old": {
+        "envelope_keys": [
+          "action",
+          "details",
+          "elapsed_ms",
+          "errors",
+          "exit_code",
+          "ok",
+          "stats",
+          "ts"
+        ],
+        "exit_code": 1
+      },
+      "status": "match",
+      "verb": "version"
+    }
+  ]
+}

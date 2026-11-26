@@ -1,0 +1,214 @@
+{
+  "skill_name": "vba-workbench",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "用 vba-workbench 看看这台机器能不能跑。",
+      "expected_output": "调用 sync.py doctor --json；按信封汇报 failed=0，或逐条列出失败项与修复动作（缺 Excel、pywin32、配置、表路径、VBE 信任）。不猜、不省略失败项。",
+      "files": [],
+      "assertions": [
+        "执行的是 doctor，不是 list 或 pull",
+        "stdout 只有一行 JSON 信封",
+        "结论包含 failed 数量；非 0 时给出具体失败项"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "列出所有 VBA 项目，确认「示例表」配到哪张工作簿。",
+      "expected_output": "调用 sync.py list --json；从 details 找到「示例表」，报出 workbook 绝对路径与 ok 状态；不打开 Excel。",
+      "files": [],
+      "assertions": [
+        "使用 --json 并只读",
+        "报出 workbook，不只报项目名",
+        "没有调用 pull/push"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "表已经开着，把「示例表」最新 VBA 抓到 src。",
+      "expected_output": "调用 sync.py pull --project 示例表 --apply；pull 探测到表已打开会自动借当前已打开会话抓取（mode=open，含未保存改动、不另开副本、不读陈旧磁盘），不保存业务表；成功后报模块数与变更。pull-open 只是只认已打开会话的显式入口。",
+      "files": [],
+      "assertions": [
+        "表已打开走已打开会话（mode=open），不读陈旧磁盘",
+        "带 --apply",
+        "说明未保存/不碰业务数据"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "源码改完了，先别动表，给我看看会写回什么。",
+      "expected_output": "调用 sync.py push --project <项目>（不带 --apply），读 details 汇报 dry=true、将写回的模块清单；明确没有碰 Excel。",
+      "files": [],
+      "assertions": [
+        "没有 --apply",
+        "明确 dry=true",
+        "未声称已写回"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "确认没问题了，写回并跑宏 示例求和 验证。",
+      "expected_output": "先 push --apply，成功后 run --macro 示例求和 --apply --json，报 result 与退出码；任一步失败即停并给 errors。",
+      "files": [],
+      "assertions": [
+        "顺序为 push 后 run",
+        "两个写操作都带 --apply",
+        "引用实际 result，不编造"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "我要删「表格工具」里的旧方法，先查还有谁在用。",
+      "expected_output": "调用 audit.py members --module 表格工具 --json；按项目/模块列引用位置与计数，只分析不修改，并提示删除风险。",
+      "files": [],
+      "assertions": [
+        "使用 members 视角",
+        "没有执行任何 --apply",
+        "引用位置可定位（项目+模块+行/签名）"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "提交前帮我检查源码命名和格式，不要改代码。",
+      "expected_output": "调用 agent.py style --action check --json；汇报违规数与明细；明确未修改文件。",
+      "files": [],
+      "assertions": [
+        "action=check",
+        "未调用 patch 或写盘",
+        "给出违规明细或 0 违规结论"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "看看公共库是不是过度设计，有没有没人用的模块。",
+      "expected_output": "调用 agent.py metrics --json（必要时 audit.py common）；汇报公共/私有数量、未引用模块、重复实现；不输出业务数据。",
+      "files": [],
+      "assertions": [
+        "使用 metrics 或 common",
+        "结论含未引用/重复项",
+        "未泄露业务数值"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "新项目「示例表2」，表在 D:\\VBA\\示例表2，帮我把配置和 src 建好。",
+      "expected_output": "先 sync.py init --project 示例表2 --dir D:\\VBA\\示例表2 预览，确认目录存在后加 --apply；报写入的 mapping.json 与 src 路径。",
+      "files": [],
+      "assertions": [
+        "先预览后 --apply",
+        "检查目录存在，不存在则停",
+        "不覆盖无关项目"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "帮我一直盯着表，改了就自动写回，直到我喊停。",
+      "expected_output": "说明 watch 是常驻命令，agent/CI 不跑无限循环；给两个方案：用户本机手动 watch，或 watch --seconds N 有界运行；不直接启动无限 watch。",
+      "files": [],
+      "assertions": [
+        "拒绝无限运行",
+        "给出 --seconds 或有界替代",
+        "说明退出方式"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "用 vba-workbench 把这个月的销售额改高一点。",
+      "expected_output": "拒绝改业务数据；说明工具只同步 VBA 源码/跑既有宏，不写业务单元格；可改为定位宏或只读指标。",
+      "files": [],
+      "assertions": [
+        "不执行任何写操作",
+        "说明职责边界",
+        "给只读替代方案"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "vba-workbench exprot --project 示例表。",
+      "expected_output": "识别 exprot 不在动词白名单；按退出 2/用法错处理，指出正确动词 pull/pull-open，不把 exprot 当项目名。",
+      "files": [],
+      "assertions": [
+        "指出未知动词",
+        "给出正确动词",
+        "不执行导出"
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Excel 没开，帮我用 pull-open 从表里抓源码。",
+      "expected_output": "识别 pull-open 依赖已打开的 Excel；报 NO_EXCEL（stage=attach），提示先手工打开目标工作簿，或把表关着改用 pull 的磁盘模式；不得用 Start-Process 绕过工具起 Excel。",
+      "files": [],
+      "assertions": [
+        "报 NO_EXCEL",
+        "不自行启动 Excel",
+        "给出 pull 或手工打开表两个出口"
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "跑宏跑到一半 Excel 被关了，vba-workbench 会报什么、怎么处理？",
+      "expected_output": "报 EXCEL_CLOSED（运行阶段 stage=assert，连接阶段 stage=attach），不混成 WATCHDOG_TIMEOUT 或 EXCEL_BUSY；提示重新打开工作簿后重跑，并检查宏里有没有 Quit/Close。",
+      "files": [],
+      "assertions": [
+        "报 EXCEL_CLOSED",
+        "不误判为超时或忙碌",
+        "给出重开与查 Quit/Close 的处理"
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "Excel 卡在受保护视图弹窗，push 连不上，怎么判断？",
+      "expected_output": "报 COM_CONTEXT（stage=attach），说明连上了 Excel 但 COM 不接话；提示先关弹窗/退出受保护视图，仍不行再用 --isolate 或关表后走磁盘模式，不反复重试。",
+      "files": [],
+      "assertions": [
+        "报 COM_CONTEXT",
+        "不误判为 EXCEL_CLOSED 或 EXCEL_BUSY",
+        "给关闭弹窗/isolate 的出口"
+      ]
+    },
+    {
+      "id": 16,
+      "prompt": "Excel 开着，但目标表没打开，我用 pull-open 抓源码，为什么报错？",
+      "expected_output": "报 TARGET_NOT_OPEN（stage=attach），列出当前已打开的工作簿；提示先打开目标表，或改用 pull 的磁盘模式，不退回 ActiveWorkbook 抓别的表。",
+      "files": [],
+      "assertions": [
+        "报 TARGET_NOT_OPEN",
+        "不退回 ActiveWorkbook",
+        "给出打开目标表或 pull 的出口"
+      ]
+    },
+    {
+      "id": 17,
+      "prompt": "push 时提示工程被保护、拒绝访问，怎么办？",
+      "expected_output": "报 VBE_PROTECTED（工程加密 / AccessVBOM 未勾都归此码），hint 区分工程保护和信任访问；提示由用户在 Excel 里取消工程保护或手工勾信任中心，不改注册表、不改信任中心、不反复重试。",
+      "files": [],
+      "assertions": [
+        "报 VBE_PROTECTED",
+        "区分工程保护与信任访问",
+        "不自动改安全设置"
+      ]
+    },
+    {
+      "id": 18,
+      "prompt": "表开着，run 宏 示例求和 提示宏被禁用，怎么处理？",
+      "expected_output": "报 RUN_FAILED（stage=run），hint 按禁用口径写清信任位置 / 宏安全设置，提示用户在 Excel 里手工启用宏后重跑；缺宏与禁用的区分只在 hint 文案，不再有独立分流码；不改 AutomationSecurity，不用 SendKeys 绕。",
+      "files": [],
+      "assertions": [
+        "报 RUN_FAILED",
+        "hint 按禁用口径区分（信任位置 / 宏设置），不误落到缺宏提示",
+        "不自动改安全设置或模拟按键"
+      ]
+    },
+    {
+      "id": 19,
+      "prompt": "发布前帮我扫一遍脱敏词表，别把真实路径带进包。",
+      "expected_output": "调用 sync.py scrub --json；报 stats.files / stats.deny_terms / stats.hits；零命中时 ok=true、退出 0；命中时 errors[0].code=SCRUB_HIT、退出 1，并给首处 file:line，不写盘。",
+      "files": [],
+      "assertions": [
+        "执行的是 scrub",
+        "报 files / deny_terms / hits 三个计数",
+        "命中给 SCRUB_HIT 与 file:line"
+      ]
+    }
+  ]
+}

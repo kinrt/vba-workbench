@@ -1,0 +1,2 @@
+# 唯一第三方依赖：Excel COM 绑定
+pywin32>=306 ; sys_platform == "win32"

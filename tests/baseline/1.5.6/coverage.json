@@ -1,0 +1,1540 @@
+{
+  "meta": {
+    "baseline_tag": "baseline-1.5.6",
+    "baseline_commit": "693d4911f6b5fb9d7df4f0b3164e58aa963be0c4",
+    "manifest_source": "scripts/toolkit/commands.py (load_specs)",
+    "worktree_head": "d0e9c2c",
+    "version": "1.6.3",
+    "scope": "命令 × 四类用例覆盖对照；不启动 Excel、不碰业务表，COM 打桩",
+    "coverage_types": [
+      "success",
+      "business_fail",
+      "usage_error",
+      "json_purity"
+    ],
+    "case_status": {
+      "covered": "有测试证据（class.method + file:line）",
+      "missing": "本轮无对应用例，记缺"
+    },
+    "migration_status_definitions": {
+      "verified": "命令面与 1.5.6 基线差分等价（diff-report match），无未登记差异",
+      "approved-diff": "差异已登记 approved_deltas.json 白名单（有意修复/规范变更/已裁决统一化）",
+      "pending": "存在待裁决真差异或缺口，尚未登记白名单，不得视为已迁移完成"
+    },
+    "evidence_rule": "证据为 tests/ 下真实存在的 class.method；file:line 经脚本逐条校验，未登记证据一律记 missing"
+  },
+  "verbs": [
+    {
+      "entry": "sync",
+      "verb": "version",
+      "handler": "features.core:version",
+      "args_face": "`--json`；`--no-input`",
+      "test_module": "tests/test_core_sync_entry.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.version.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "VersionHandlerTest",
+          "method": "test_version_success",
+          "evidence": "tests/test_core_sync_entry.py:128",
+          "note": ""
+        },
+        {
+          "case_id": "contract.version.mismatch",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "VersionHandlerTest",
+          "method": "test_version_mismatch_exit1",
+          "evidence": "tests/test_core_sync_entry.py:140",
+          "note": "VERSION_MISMATCH exit 1"
+        },
+        {
+          "case_id": "contract.version.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "VersionHandlerTest",
+          "method": "test_version_rejects_apply_exit2",
+          "evidence": "tests/test_core_sync_entry.py:151",
+          "note": "只读动词拒绝 --apply，exit 2"
+        },
+        {
+          "case_id": "contract.version.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "VersionHandlerTest",
+          "method": "test_version_json_single_line",
+          "evidence": "tests/test_core_sync_entry.py:157",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "list",
+      "handler": "features.core:list_projects",
+      "args_face": "`--json`；`--no-input`",
+      "test_module": "tests/test_core_sync_entry.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.list.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "ListHandlerTest",
+          "method": "test_list_success",
+          "evidence": "tests/test_core_sync_entry.py:194",
+          "note": ""
+        },
+        {
+          "case_id": "contract.list.target-not-found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "ListHandlerTest",
+          "method": "test_list_target_not_found_exit1",
+          "evidence": "tests/test_core_sync_entry.py:207",
+          "note": "TARGET_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.list.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "ListHandlerTest",
+          "method": "test_list_rejects_apply_exit2",
+          "evidence": "tests/test_core_sync_entry.py:218",
+          "note": "只读动词拒绝 --apply，exit 2"
+        },
+        {
+          "case_id": "contract.list.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "ListHandlerTest",
+          "method": "test_list_json_single_line",
+          "evidence": "tests/test_core_sync_entry.py:224",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "doctor",
+      "handler": "features.core:doctor",
+      "args_face": "`--json`；`--no-input`；`--verify-package`",
+      "test_module": "tests/test_core_sync_entry.py",
+      "migration_status": "approved-diff",
+      "migration_note": "差异已登记 approved_deltas.json 白名单（有意变更/已裁决）",
+      "cases": [
+        {
+          "case_id": "contract.doctor.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "DoctorHandlerTest",
+          "method": "test_doctor_success",
+          "evidence": "tests/test_core_sync_entry.py:253",
+          "note": ""
+        },
+        {
+          "case_id": "contract.doctor.failed",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "DoctorHandlerTest",
+          "method": "test_doctor_failed_exit1",
+          "evidence": "tests/test_core_sync_entry.py:262",
+          "note": "体检不合格 exit 1；另见 test_doctor_verify_package_missing_manifest_exit1:337"
+        },
+        {
+          "case_id": "contract.doctor.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "DoctorHandlerTest",
+          "method": "test_doctor_rejects_apply_exit2",
+          "evidence": "tests/test_core_sync_entry.py:315",
+          "note": "只读动词拒绝 --apply，exit 2"
+        },
+        {
+          "case_id": "contract.doctor.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "DoctorHandlerTest",
+          "method": "test_doctor_json_single_line",
+          "evidence": "tests/test_core_sync_entry.py:321",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "vbamod",
+      "handler": "features.sync_read:vbamod",
+      "args_face": "`--project`；`--json`；`--no-input`",
+      "test_module": "tests/test_sync_read.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.vbamod.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "TestVbamod",
+          "method": "test_vbamod_success",
+          "evidence": "tests/test_sync_read.py:96",
+          "note": ""
+        },
+        {
+          "case_id": "contract.vbamod.not_found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "TestVbamod",
+          "method": "test_vbamod_project_not_found",
+          "evidence": "tests/test_sync_read.py:119",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.vbamod.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "TestVbamod",
+          "method": "test_vbamod_usage_error",
+          "evidence": "tests/test_sync_read.py:127",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "contract.vbamod.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "TestVbamod",
+          "method": "test_vbamod_json_purity",
+          "evidence": "tests/test_sync_read.py:132",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "plan",
+      "handler": "features.sync_read:plan",
+      "args_face": "`--project`（必填）；`--json`；`--no-input`；`--intent choice`={pull/push/run/watch}（默认 push）",
+      "test_module": "tests/test_sync_read.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.plan.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "TestPlan",
+          "method": "test_plan_success_closed",
+          "evidence": "tests/test_sync_read.py:154",
+          "note": ""
+        },
+        {
+          "case_id": "contract.plan.target_missing",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "TestPlan",
+          "method": "test_plan_target_missing",
+          "evidence": "tests/test_sync_read.py:186",
+          "note": "TARGET_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.plan.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "TestPlan",
+          "method": "test_plan_usage_error",
+          "evidence": "tests/test_sync_read.py:198",
+          "note": "缺 --project exit 2"
+        },
+        {
+          "case_id": "contract.plan.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "TestPlan",
+          "method": "test_plan_json_purity",
+          "evidence": "tests/test_sync_read.py:215",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "pull",
+      "handler": "features.sync_read:pull",
+      "args_face": "`--project` / `--all-project`（互斥必填）；`--apply`；`--json`；`--no-input`；`--no-backup`",
+      "test_module": "tests/test_sync_read.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.pull.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "TestPull",
+          "method": "test_pull_success_dry",
+          "evidence": "tests/test_sync_read.py:236",
+          "note": "预览 dry"
+        },
+        {
+          "case_id": "contract.pull.target_missing",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "TestPull",
+          "method": "test_pull_target_missing",
+          "evidence": "tests/test_sync_read.py:250",
+          "note": "TARGET_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.pull.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "TestPull",
+          "method": "test_pull_usage_error_neither_project",
+          "evidence": "tests/test_sync_read.py:393",
+          "note": "缺项目/互斥 exit 2；另见 test_pull_usage_error_mutually_exclusive:398"
+        },
+        {
+          "case_id": "contract.pull.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "TestPull",
+          "method": "test_pull_json_purity",
+          "evidence": "tests/test_sync_read.py:403",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "pull-open",
+      "handler": "features.sync_read:pull_open",
+      "args_face": "`--project`（必填）；`--apply`；`--json`；`--no-input`；`--no-backup`",
+      "test_module": "tests/test_sync_read.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.pull-open.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "TestPullOpen",
+          "method": "test_pull_open_success_dry",
+          "evidence": "tests/test_sync_read.py:435",
+          "note": "预览 dry"
+        },
+        {
+          "case_id": "contract.pull-open.target_missing",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "TestPullOpen",
+          "method": "test_pull_open_project_not_found",
+          "evidence": "tests/test_sync_read.py:449",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.pull-open.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "TestPullOpen",
+          "method": "test_pull_open_usage_error",
+          "evidence": "tests/test_sync_read.py:456",
+          "note": "缺 --project exit 2"
+        },
+        {
+          "case_id": "contract.pull-open.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "TestPullOpen",
+          "method": "test_pull_open_json_purity",
+          "evidence": "tests/test_sync_read.py:461",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "init",
+      "handler": "features.sync_push:init",
+      "args_face": "`--project`（必填）；`--apply`；`--json`；`--no-input`；`--dir str`；`--prefix str`；`--src str`；`--config str`；`--lab`",
+      "test_module": "tests/test_sync_push.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.init.preview",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "InitTest",
+          "method": "test_preview_does_not_write",
+          "evidence": "tests/test_sync_push.py:241",
+          "note": "预览不落盘；apply 路径见 test_apply_writes_config_and_src:255"
+        },
+        {
+          "case_id": "contract.init.business_fail",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "InitTest",
+          "method": "test_invalid_json_is_business_failure",
+          "evidence": "tests/test_sync_push.py:270",
+          "note": "CONFIG_INVALID exit 1"
+        },
+        {
+          "case_id": "contract.init.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "InitTest",
+          "method": "test_missing_project_is_usage_error_exit_2",
+          "evidence": "tests/test_sync_push.py:282",
+          "note": "缺 --project exit 2；handler 用法错见 test_missing_dir_is_handler_usage_exit_2:289"
+        },
+        {
+          "case_id": "contract.init.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "InitTest",
+          "method": "test_json_envelope_single_line",
+          "evidence": "tests/test_sync_push.py:299",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "push",
+      "handler": "features.sync_push:push",
+      "args_face": "`--project` / `--all-project`（互斥必填）；`--apply`；`--json`；`--no-input`；`--doc-modules`；`--no-save`；`--no-backup`；`--open-only`；`--rollback-on-fail`",
+      "test_module": "tests/test_sync_push.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.push.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "PushTest",
+          "method": "test_preview_success_real_preflight",
+          "evidence": "tests/test_sync_push.py:423",
+          "note": "预览；apply 成功链见 test_apply_success_open_session:438"
+        },
+        {
+          "case_id": "contract.push.target_not_open",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "PushTest",
+          "method": "test_target_not_open_is_business_failure",
+          "evidence": "tests/test_sync_push.py:492",
+          "note": "TARGET_NOT_OPEN exit 1；另见 test_project_not_found_is_business_failure:837"
+        },
+        {
+          "case_id": "contract.push.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "PushTest",
+          "method": "test_missing_project_is_usage_error_exit_2",
+          "evidence": "tests/test_sync_push.py:884",
+          "note": "缺项目/互斥 exit 2"
+        },
+        {
+          "case_id": "contract.push.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "PushTest",
+          "method": "test_json_envelope_single_line",
+          "evidence": "tests/test_sync_push.py:1127",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "shells",
+      "handler": "features.sync_push:shells",
+      "args_face": "`--apply`；`--json`；`--no-input`；`--mode choice`={create/clean}（默认 create）",
+      "test_module": "tests/test_sync_push.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.shells.create",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "ShellsTest",
+          "method": "test_create_preview_does_not_write",
+          "evidence": "tests/test_sync_push.py:183",
+          "note": "create 预览；clean 成功见 test_clean_apply_removes_shell:196"
+        },
+        {
+          "case_id": "contract.shells.business_fail",
+          "coverage_type": "business_fail",
+          "status": "missing",
+          "class": null,
+          "method": null,
+          "evidence": null,
+          "note": "缺：无目标缺失/预检失败类业务失败用例"
+        },
+        {
+          "case_id": "contract.shells.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "ShellsTest",
+          "method": "test_bad_mode_is_usage_error_exit_2",
+          "evidence": "tests/test_sync_push.py:213",
+          "note": "非法 --mode 取值 exit 2"
+        },
+        {
+          "case_id": "contract.shells.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "ShellsTest",
+          "method": "test_json_envelope_single_line",
+          "evidence": "tests/test_sync_push.py:218",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "align",
+      "handler": "features.sync_transform:align",
+      "args_face": "`--project`；`--apply`；`--json`；`--no-input`",
+      "test_module": "tests/test_sync_transform.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "transform.align.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "AlignTest",
+          "method": "test_success_preview_lists_same_name",
+          "evidence": "tests/test_sync_transform.py:117",
+          "note": ""
+        },
+        {
+          "case_id": "transform.align.not_found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "AlignTest",
+          "method": "test_business_failure_unknown_project",
+          "evidence": "tests/test_sync_transform.py:128",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "transform.align.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "AlignTest",
+          "method": "test_usage_error_bad_flag_exits_2",
+          "evidence": "tests/test_sync_transform.py:136",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "transform.align.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "AlignTest",
+          "method": "test_json_purity_single_envelope",
+          "evidence": "tests/test_sync_transform.py:142",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "promote",
+      "handler": "features.sync_transform:promote",
+      "args_face": "`--project`（必填）；`--apply`；`--json`；`--no-input`；`--module str`（必填）",
+      "test_module": "tests/test_sync_transform.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "transform.promote.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "PromoteTest",
+          "method": "test_success_preview",
+          "evidence": "tests/test_sync_transform.py:164",
+          "note": "预览；apply 见 test_success_apply_moves_and_writes_shell:179"
+        },
+        {
+          "case_id": "transform.promote.not_found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "PromoteTest",
+          "method": "test_business_failure_module_not_found",
+          "evidence": "tests/test_sync_transform.py:193",
+          "note": "TARGET_NOT_FOUND exit 1；另见 test_business_failure_target_exists:201"
+        },
+        {
+          "case_id": "transform.promote.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "PromoteTest",
+          "method": "test_usage_error_missing_args_exits_2",
+          "evidence": "tests/test_sync_transform.py:211",
+          "note": "缺必填 --module exit 2"
+        },
+        {
+          "case_id": "transform.promote.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "PromoteTest",
+          "method": "test_json_purity_single_envelope",
+          "evidence": "tests/test_sync_transform.py:220",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "gbk-export",
+      "handler": "features.sync_transform:gbk_export",
+      "args_face": "`--project` / `--all-project`（互斥必填）；`--apply`；`--json`；`--no-input`",
+      "test_module": "tests/test_sync_transform.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "transform.gbk_export.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "GbkExportTest",
+          "method": "test_success_preview",
+          "evidence": "tests/test_sync_transform.py:243",
+          "note": "预览；apply 见 test_success_apply_writes_gbk_crlf:256"
+        },
+        {
+          "case_id": "transform.gbk_export.not_found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "GbkExportTest",
+          "method": "test_business_failure_unknown_project",
+          "evidence": "tests/test_sync_transform.py:269",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "transform.gbk_export.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "GbkExportTest",
+          "method": "test_usage_error_no_project_exits_2",
+          "evidence": "tests/test_sync_transform.py:275",
+          "note": "缺项目/互斥 exit 2"
+        },
+        {
+          "case_id": "transform.gbk_export.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "GbkExportTest",
+          "method": "test_json_purity_single_envelope",
+          "evidence": "tests/test_sync_transform.py:281",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "clean-backup",
+      "handler": "features.sync_transform:clean_backup",
+      "args_face": "`--apply`；`--json`；`--no-input`；`--keep int`；`--keep-tag append`",
+      "test_module": "tests/test_sync_transform.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "transform.clean_backup.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "CleanBackupTest",
+          "method": "test_success_preview_defaults",
+          "evidence": "tests/test_sync_transform.py:305",
+          "note": ""
+        },
+        {
+          "case_id": "transform.clean_backup.bad_config",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "CleanBackupTest",
+          "method": "test_business_failure_bad_config",
+          "evidence": "tests/test_sync_transform.py:333",
+          "note": "CONFIG_INVALID exit 1"
+        },
+        {
+          "case_id": "transform.clean_backup.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "CleanBackupTest",
+          "method": "test_usage_error_non_integer_keep_exits_2",
+          "evidence": "tests/test_sync_transform.py:341",
+          "note": "--keep 非整数 exit 2"
+        },
+        {
+          "case_id": "transform.clean_backup.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "CleanBackupTest",
+          "method": "test_json_purity_single_envelope",
+          "evidence": "tests/test_sync_transform.py:347",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "run",
+      "handler": "features.run:run",
+      "args_face": "`--project`（必填）；`--apply`；`--json`；`--no-input`；`--macro str`（必填）；`--arg append`（默认 []）；`--push`；`--isolate`；`--save`；`--tail int`（默认 40）；`--log str`；`--log-optional`；`--rollback-on-fail`",
+      "test_module": "tests/test_run.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.run.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "RunFeatureTest",
+          "method": "test_dry_run_preview_touches_no_excel",
+          "evidence": "tests/test_run.py:291",
+          "note": "预览；apply 成功链见 test_attach_success_real_chain:335"
+        },
+        {
+          "case_id": "contract.run.failed",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "RunFeatureTest",
+          "method": "test_business_failure_exit1_with_code",
+          "evidence": "tests/test_run.py:401",
+          "note": "RUN_FAILED exit 1；另见 test_project_not_found_raises:417"
+        },
+        {
+          "case_id": "contract.run.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "RunFeatureTest",
+          "method": "test_parser_usage_exit2",
+          "evidence": "tests/test_run.py:434",
+          "note": "缺 --macro exit 2；handler 用法错见 test_usage_missing_macro_raises_usage:424"
+        },
+        {
+          "case_id": "contract.run.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "RunFeatureTest",
+          "method": "test_run_json_is_single_line",
+          "evidence": "tests/test_run.py:440",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "sync",
+      "verb": "watch",
+      "handler": "features.run:watch",
+      "args_face": "`--project`；`--apply`；`--json`（不支持，拒绝）；`--no-input`；`--interval float`（默认 1.0）；`--startup choice`={ask/src/vbe/each/skip}（默认 ask）；`--no-save`；`--no-backup`；`--doc-modules`；`--seconds int`（默认 0）",
+      "test_module": "tests/test_run.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.watch.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "WatchFeatureTest",
+          "method": "test_target_resolution_and_probe_real_chain",
+          "evidence": "tests/test_run.py:474",
+          "note": "首轮探活成功后监听退出"
+        },
+        {
+          "case_id": "contract.watch.failed",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "WatchFeatureTest",
+          "method": "test_no_target_exit1",
+          "evidence": "tests/test_run.py:510",
+          "note": "TARGET_NOT_OPEN exit 1"
+        },
+        {
+          "case_id": "contract.watch.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "WatchFeatureTest",
+          "method": "test_parser_bad_choice_exit2",
+          "evidence": "tests/test_run.py:629",
+          "note": "非法 --startup 取值 exit 2"
+        },
+        {
+          "case_id": "contract.watch.reject_json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "WatchFeatureTest",
+          "method": "test_reject_json_exit2_no_json_on_stdout",
+          "evidence": "tests/test_run.py:597",
+          "note": "watch 不支持 --json：拒绝并 exit 2、stdout 不出信封；端到端见 test_watch_reject_json_main_entry_exit2:611"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "probe",
+      "handler": "features.agent_io:probe",
+      "args_face": "`--project`；`--json`；`--no-input`；`--strict`",
+      "test_module": "tests/test_agent_io.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.probe.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "ProbeContract",
+          "method": "test_probe_success_json_pure",
+          "evidence": "tests/test_agent_io.py:114",
+          "note": "成功与 JSON 纯度同一用例"
+        },
+        {
+          "case_id": "contract.probe.target-not-found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "ProbeContract",
+          "method": "test_probe_unknown_project_business_failure",
+          "evidence": "tests/test_agent_io.py:125",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.probe.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "ProbeContract",
+          "method": "test_probe_usage_error_exit_2",
+          "evidence": "tests/test_agent_io.py:134",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "contract.probe.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "ProbeContract",
+          "method": "test_probe_success_json_pure",
+          "evidence": "tests/test_agent_io.py:114",
+          "note": "单行信封；另见 tests/test_agent_json.py:17"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "book",
+      "handler": "features.agent_io:book",
+      "args_face": "`--project`；`--apply`；`--json`；`--no-input`；`--action choice`={open/close}（必填）",
+      "test_module": "tests/test_agent_io.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.book.open",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "BookContract",
+          "method": "test_book_open_preview_success_json_pure",
+          "evidence": "tests/test_agent_io.py:173",
+          "note": "open 预览；成功与 JSON 纯度同一用例"
+        },
+        {
+          "case_id": "contract.book.close-not-open",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "BookContract",
+          "method": "test_book_unknown_project_business_failure",
+          "evidence": "tests/test_agent_io.py:183",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.book.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "BookContract",
+          "method": "test_book_missing_action_usage_error_exit_2",
+          "evidence": "tests/test_agent_io.py:192",
+          "note": "缺必填 --action exit 2"
+        },
+        {
+          "case_id": "contract.book.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "BookContract",
+          "method": "test_book_open_preview_success_json_pure",
+          "evidence": "tests/test_agent_io.py:173",
+          "note": "单行信封"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "backup",
+      "handler": "features.agent_io:backup",
+      "args_face": "`--project`；`--apply`；`--json`；`--no-input`；`--tag str`",
+      "test_module": "tests/test_agent_io.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.backup.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "BackupContract",
+          "method": "test_backup_preview_success_json_pure",
+          "evidence": "tests/test_agent_io.py:206",
+          "note": "预览；成功与 JSON 纯度同一用例"
+        },
+        {
+          "case_id": "contract.backup.target-not-found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "BackupContract",
+          "method": "test_backup_unknown_project_business_failure",
+          "evidence": "tests/test_agent_io.py:215",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.backup.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "BackupContract",
+          "method": "test_backup_usage_error_exit_2",
+          "evidence": "tests/test_agent_io.py:223",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "contract.backup.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "BackupContract",
+          "method": "test_backup_preview_success_json_pure",
+          "evidence": "tests/test_agent_io.py:206",
+          "note": "单行信封"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "logs",
+      "handler": "features.agent_io:logs",
+      "args_face": "`--project`；`--json`；`--no-input`；`--log str`；`--tail int`（默认 40）",
+      "test_module": "tests/test_agent_io.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "contract.logs.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "LogsContract",
+          "method": "test_logs_success_json_pure",
+          "evidence": "tests/test_agent_io.py:237",
+          "note": "成功与 JSON 纯度同一用例"
+        },
+        {
+          "case_id": "contract.logs.not-found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "LogsContract",
+          "method": "test_logs_not_found_business_failure",
+          "evidence": "tests/test_agent_io.py:250",
+          "note": "LOGS_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "contract.logs.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "LogsContract",
+          "method": "test_logs_usage_error_exit_2",
+          "evidence": "tests/test_agent_io.py:260",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "contract.logs.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "LogsContract",
+          "method": "test_logs_success_json_pure",
+          "evidence": "tests/test_agent_io.py:237",
+          "note": "单行信封；另见 tests/test_agent_json.py:39"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "push",
+      "handler": "features.agent_io:push",
+      "args_face": "`--project`；`--apply`；`--json`；`--no-input`；`--doc-modules`；`--no-save`；`--no-backup`；`--open-only`；`--rollback-on-fail`",
+      "test_module": "tests/test_agent_io.py",
+      "migration_status": "approved-diff",
+      "migration_note": "差异已登记 approved_deltas.json 白名单（有意变更/已裁决）",
+      "cases": [
+        {
+          "case_id": "contract.push.preview",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "PushContract",
+          "method": "test_push_preview_success_json_pure",
+          "evidence": "tests/test_agent_io.py:276",
+          "note": "预览；成功与 JSON 纯度同一用例"
+        },
+        {
+          "case_id": "contract.push.project-not-found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "PushContract",
+          "method": "test_push_unknown_project_business_failure",
+          "evidence": "tests/test_agent_io.py:287",
+          "note": "PROJECT_NOT_FOUND exit 1；另见 test_push_preflight_failure_reports_source_preflight:299"
+        },
+        {
+          "case_id": "contract.push.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "PushContract",
+          "method": "test_push_usage_error_exit_2",
+          "evidence": "tests/test_agent_io.py:295",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "contract.push.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "PushContract",
+          "method": "test_push_preview_success_json_pure",
+          "evidence": "tests/test_agent_io.py:276",
+          "note": "单行信封"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "assert",
+      "handler": "features.agent_patch:handle_assert",
+      "args_face": "`--project`；`--apply`；`--json`；`--no-input`；`--macro str`；`--sheet str`；`--clear`；`--baseline int`（默认 35）；`--timeout float`（默认 120）；`--log str`",
+      "test_module": "tests/test_agent_patch.py",
+      "migration_status": "pending",
+      "migration_note": "CLI --json 接受度为待裁决真差异，未登记白名单；见 tests/test_release_diff.py KNOWN_REAL_GAPS",
+      "cases": [
+        {
+          "case_id": "contract.assert.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "AssertTest",
+          "method": "test_assert_success",
+          "evidence": "tests/test_agent_patch.py:438",
+          "note": ""
+        },
+        {
+          "case_id": "contract.assert.no_table",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "AssertTest",
+          "method": "test_assert_failure_exit_1_with_code",
+          "evidence": "tests/test_agent_patch.py:503",
+          "note": "ASSERT_FAILED exit 1；另见 no_log:537、watchdog_timeout:555、target_not_open:575"
+        },
+        {
+          "case_id": "contract.assert.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "AssertTest",
+          "method": "test_assert_usage_error_exits_2",
+          "evidence": "tests/test_agent_patch.py:591",
+          "note": "--timeout 非数字 exit 2"
+        },
+        {
+          "case_id": "contract.assert.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "AssertTest",
+          "method": "test_assert_json_is_single_line",
+          "evidence": "tests/test_agent_patch.py:596",
+          "note": "进程内单行信封；CLI --json 接受度待裁决（见 migration_status=pending）"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "patch",
+      "handler": "features.agent_patch:handle_patch",
+      "args_face": "`--project`；`--apply`；`--json`；`--no-input`；`--file str`（必填）；`--no-style`",
+      "test_module": "tests/test_agent_patch.py",
+      "migration_status": "pending",
+      "migration_note": "CLI --json 接受度为待裁决真差异，未登记白名单；见 tests/test_release_diff.py KNOWN_REAL_GAPS",
+      "cases": [
+        {
+          "case_id": "contract.patch.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "PatchTest",
+          "method": "test_patch_dry_run_success",
+          "evidence": "tests/test_agent_patch.py:169",
+          "note": "dry-run"
+        },
+        {
+          "case_id": "contract.patch.format",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "PatchTest",
+          "method": "test_patch_format_error",
+          "evidence": "tests/test_agent_patch.py:185",
+          "note": "PATCH_FORMAT；另见 ambiguous:197、file_not_found:209"
+        },
+        {
+          "case_id": "contract.patch.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "PatchTest",
+          "method": "test_patch_usage_error_exits_2",
+          "evidence": "tests/test_agent_patch.py:217",
+          "note": "缺必填 --file exit 2"
+        },
+        {
+          "case_id": "contract.patch.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "PatchTest",
+          "method": "test_patch_json_is_single_line",
+          "evidence": "tests/test_agent_patch.py:222",
+          "note": "进程内单行信封；CLI --json 接受度待裁决（pending）"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "metrics",
+      "handler": "features.agent_patch:handle_metrics",
+      "args_face": "`--apply`；`--json`；`--no-input`；`--out str`",
+      "test_module": "tests/test_agent_patch.py",
+      "migration_status": "pending",
+      "migration_note": "CLI --json 接受度为待裁决真差异，未登记白名单；见 tests/test_release_diff.py KNOWN_REAL_GAPS",
+      "cases": [
+        {
+          "case_id": "contract.metrics.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "MetricsTest",
+          "method": "test_metrics_success",
+          "evidence": "tests/test_agent_patch.py:263",
+          "note": ""
+        },
+        {
+          "case_id": "contract.metrics.failed",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "MetricsFailureEntryTest",
+          "method": "test_metrics_source_read_failure_is_unexpected_exit1",
+          "evidence": "tests/test_agent_patch.py:652",
+          "note": "UNEXPECTED exit 1；另见 report_write_failure:666"
+        },
+        {
+          "case_id": "contract.metrics.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "MetricsTest",
+          "method": "test_metrics_usage_error_exits_2",
+          "evidence": "tests/test_agent_patch.py:285",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "contract.metrics.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "MetricsTest",
+          "method": "test_metrics_json_is_single_line",
+          "evidence": "tests/test_agent_patch.py:290",
+          "note": "进程内单行信封；CLI --json 接受度待裁决（pending）"
+        }
+      ]
+    },
+    {
+      "entry": "agent",
+      "verb": "style",
+      "handler": "features.agent_patch:handle_style",
+      "args_face": "`--project`；`--apply`；`--json`；`--no-input`；`--action choice`={check/fix}（默认 check）；`--which choice`={all/eol/call/explicit}（默认 all）；`--scope str`（默认 src）",
+      "test_module": "tests/test_agent_patch.py",
+      "migration_status": "pending",
+      "migration_note": "CLI --json 接受度为待裁决真差异，未登记白名单；见 tests/test_release_diff.py KNOWN_REAL_GAPS",
+      "cases": [
+        {
+          "case_id": "contract.style.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "StyleTest",
+          "method": "test_style_success",
+          "evidence": "tests/test_agent_patch.py:88",
+          "note": ""
+        },
+        {
+          "case_id": "contract.style.failure",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "StyleTest",
+          "method": "test_style_business_failure_has_code",
+          "evidence": "tests/test_agent_patch.py:98",
+          "note": "SOURCE_PREFLIGHT exit 1；另见 tests/test_agent_json.py:61"
+        },
+        {
+          "case_id": "contract.style.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "StyleTest",
+          "method": "test_style_usage_error_exits_2",
+          "evidence": "tests/test_agent_patch.py:108",
+          "note": "非法 --action 取值 exit 2"
+        },
+        {
+          "case_id": "contract.style.json",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "StyleTest",
+          "method": "test_style_json_is_single_line",
+          "evidence": "tests/test_agent_patch.py:113",
+          "note": "进程内单行信封；CLI --json 接受度待裁决（pending）"
+        }
+      ]
+    },
+    {
+      "entry": "audit",
+      "verb": "members",
+      "handler": "features.audit_a:handle_members",
+      "args_face": "`--json`；`--no-input`；`--module str`（必填）；`--exclude append`；`--all`；`--md path`；`--out path`",
+      "test_module": "tests/test_audit_a.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "audit_a.members.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "MembersTest",
+          "method": "test_members_success",
+          "evidence": "tests/test_audit_a.py:91",
+          "note": ""
+        },
+        {
+          "case_id": "audit_a.members.not_found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "MembersTest",
+          "method": "test_members_business_failure_exit1_with_code",
+          "evidence": "tests/test_audit_a.py:103",
+          "note": "TARGET_NOT_FOUND exit 1；另见 empty_source_preflight:130"
+        },
+        {
+          "case_id": "audit_a.members.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "MembersTest",
+          "method": "test_members_usage_error_exit2_without_json",
+          "evidence": "tests/test_audit_a.py:113",
+          "note": "缺必填 --module exit 2；另见 rejects_project_flag:124"
+        },
+        {
+          "case_id": "audit_a.members.json_pure",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "MembersTest",
+          "method": "test_members_json_output_is_single_line",
+          "evidence": "tests/test_audit_a.py:118",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "audit",
+      "verb": "common",
+      "handler": "features.audit_a:handle_common",
+      "args_face": "`--json`；`--no-input`；`--project append`；`--exclude append`；`--all`；`--md path`；`--out path`",
+      "test_module": "tests/test_audit_a.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "audit_a.common.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "CommonTest",
+          "method": "test_common_success",
+          "evidence": "tests/test_audit_a.py:142",
+          "note": ""
+        },
+        {
+          "case_id": "audit_a.common.not_configured_exit3",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "CommonTest",
+          "method": "test_common_business_failure_exit1_with_code",
+          "evidence": "tests/test_audit_a.py:223",
+          "note": "配置损坏 UNEXPECTED exit 1；仅警告 exit 3 见 not_configured:246"
+        },
+        {
+          "case_id": "audit_a.common.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "CommonTest",
+          "method": "test_common_usage_error_exit2_without_json",
+          "evidence": "tests/test_audit_a.py:235",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "audit_a.common.json_pure",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "CommonTest",
+          "method": "test_common_json_output_is_single_line",
+          "evidence": "tests/test_audit_a.py:240",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "audit",
+      "verb": "project",
+      "handler": "features.audit_a:handle_project",
+      "args_face": "`--project`（必填）；`--json`；`--no-input`；`--exclude append`；`--all`；`--md path`；`--out path`",
+      "test_module": "tests/test_audit_a.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "audit_a.project.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "ProjectTest",
+          "method": "test_project_success",
+          "evidence": "tests/test_audit_a.py:263",
+          "note": ""
+        },
+        {
+          "case_id": "audit_a.project.not_found",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "ProjectTest",
+          "method": "test_project_business_failure_exit1_with_code",
+          "evidence": "tests/test_audit_a.py:276",
+          "note": "PROJECT_NOT_FOUND exit 1"
+        },
+        {
+          "case_id": "audit_a.project.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "ProjectTest",
+          "method": "test_project_usage_error_exit2_without_json",
+          "evidence": "tests/test_audit_a.py:286",
+          "note": "缺必填 --project exit 2"
+        },
+        {
+          "case_id": "audit_a.project.json_pure",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "ProjectTest",
+          "method": "test_project_json_output_is_single_line",
+          "evidence": "tests/test_audit_a.py:291",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "audit",
+      "verb": "structure",
+      "handler": "features.audit_b:structure",
+      "args_face": "`--json`；`--no-input`；`--exclude append`；`--ignore append`；`--strict`；`--all`；`--md str`；`--out str`",
+      "test_module": "tests/test_audit_b.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "audit_b.structure.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "StructureTest",
+          "method": "test_clean_exit_0",
+          "evidence": "tests/test_audit_b.py:184",
+          "note": ""
+        },
+        {
+          "case_id": "audit_b.structure.failed",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "StructureTest",
+          "method": "test_strict_exit_1_with_code",
+          "evidence": "tests/test_audit_b.py:205",
+          "note": "strict 阻断 exit 1；仅警告 exit 3 见 warning_only:195"
+        },
+        {
+          "case_id": "audit_b.structure.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "StructureTest",
+          "method": "test_usage_error_exit_2",
+          "evidence": "tests/test_audit_b.py:213",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "audit_b.structure.json_pure",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "StructureTest",
+          "method": "test_json_single_line",
+          "evidence": "tests/test_audit_b.py:220",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "audit",
+      "verb": "indicators",
+      "handler": "features.audit_b:indicators",
+      "args_face": "`--json`；`--no-input`；`--exclude append`；`--ignore append`；`--strict`；`--all`；`--md str`；`--out str`",
+      "test_module": "tests/test_audit_b.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "audit_b.indicators.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "IndicatorsTest",
+          "method": "test_clean_exit_0",
+          "evidence": "tests/test_audit_b.py:245",
+          "note": ""
+        },
+        {
+          "case_id": "audit_b.indicators.failed",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "IndicatorsTest",
+          "method": "test_strict_exit_1_with_code",
+          "evidence": "tests/test_audit_b.py:268",
+          "note": "strict 阻断 exit 1；仅警告 exit 3 见 warning_only:256"
+        },
+        {
+          "case_id": "audit_b.indicators.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "IndicatorsTest",
+          "method": "test_usage_error_exit_2",
+          "evidence": "tests/test_audit_b.py:276",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "audit_b.indicators.json_pure",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "IndicatorsTest",
+          "method": "test_json_single_line",
+          "evidence": "tests/test_audit_b.py:283",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "entry": "audit",
+      "verb": "overview",
+      "handler": "features.audit_b:overview",
+      "args_face": "`--json`；`--no-input`；`--project append`；`--exclude append`；`--ignore append`；`--strict`；`--all`；`--md str`；`--out str`",
+      "test_module": "tests/test_audit_b.py",
+      "migration_status": "verified",
+      "migration_note": "命令面与 1.5.6 基线差分等价（match）",
+      "cases": [
+        {
+          "case_id": "audit_b.overview.success",
+          "coverage_type": "success",
+          "status": "covered",
+          "class": "OverviewTest",
+          "method": "test_clean_exit_0",
+          "evidence": "tests/test_audit_b.py:386",
+          "note": ""
+        },
+        {
+          "case_id": "audit_b.overview.failed",
+          "coverage_type": "business_fail",
+          "status": "covered",
+          "class": "OverviewTest",
+          "method": "test_fatal_exit_1_with_code",
+          "evidence": "tests/test_audit_b.py:399",
+          "note": "fatal 阻断 exit 1；strict 升级见 418"
+        },
+        {
+          "case_id": "audit_b.overview.usage",
+          "coverage_type": "usage_error",
+          "status": "covered",
+          "class": "OverviewTest",
+          "method": "test_usage_error_exit_2",
+          "evidence": "tests/test_audit_b.py:426",
+          "note": "未知开关 exit 2"
+        },
+        {
+          "case_id": "audit_b.overview.json_pure",
+          "coverage_type": "json_purity",
+          "status": "covered",
+          "class": "OverviewTest",
+          "method": "test_json_single_line",
+          "evidence": "tests/test_audit_b.py:433",
+          "note": ""
+        }
+      ]
+    }
+  ],
+  "unrecorded_golden": [
+    {
+      "id": "excel-state-golden",
+      "name": "Excel 状态 golden（CLOSED / OPEN_CLEAN / OPEN_DIRTY / OPEN_PROTECTED / OPEN_BUSY / READONLY / COM_UNAVAILABLE）",
+      "status": "unrecorded",
+      "reason": "本轮约定不启动 Excel、不连真实 COM；测试内工作簿/会话一律替身打桩，未录制各状态机下的工作簿 probe（打开状态、保护状态、模块清单、dirty 状态）。",
+      "future_entry": "按架构方案 A.6.1 在 tests/baseline/1.5.6/commands/<entry>.<verb>/ 录制 pre_state + workbook_probe；带 @excel 标签的本地集成测试执行。"
+    },
+    {
+      "id": "file-side-effect-golden",
+      "name": "文件副作用 golden（文件树前后、备份批次、journal、.run/.backup/GBK 落盘与哈希）",
+      "status": "unrecorded",
+      "reason": "本轮不跑真实写回；未录制 files_before/files_after（路径 + 大小 + sha256）、备份数量、journal 条目与 GBK/壳文件落点。",
+      "future_entry": "按 A.6.1 在 tests/baseline/1.5.6/side_effects/ 录制；record_1_5_6.py 扩展副作用采集段。"
+    },
+    {
+      "id": "macro-run-golden",
+      "name": "真实宏执行 golden（宏运行结果、断言重试与计数、保存/回滚链路）",
+      "status": "unrecorded",
+      "reason": "本轮不启动 Excel；宏调用、参数个数重试、断言通过/失败计数、postcheck 回滚均由桩 runner 模拟，未录制真实宏执行的 stdout/日志/退出码与结果值。",
+      "future_entry": "在带 @excel 标签的本地集成环境，经 run/assert 对应命令录制宏执行 golden；入口可沿用 record_1_5_6.py 或新增宏场景段。"
+    }
+  ],
+  "summary": {
+    "verb_total": 31,
+    "migration_status_counts": {
+      "verified": 25,
+      "approved-diff": 2,
+      "pending": 4
+    },
+    "coverage_type_covered": {
+      "success": {
+        "covered": 31,
+        "total": 31,
+        "missing_verbs": []
+      },
+      "business_fail": {
+        "covered": 30,
+        "total": 31,
+        "missing_verbs": [
+          "sync.shells"
+        ]
+      },
+      "usage_error": {
+        "covered": 31,
+        "total": 31,
+        "missing_verbs": []
+      },
+      "json_purity": {
+        "covered": 31,
+        "total": 31,
+        "missing_verbs": []
+      }
+    }
+  }
+}

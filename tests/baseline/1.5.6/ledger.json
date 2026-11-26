@@ -1,0 +1,2003 @@
+{
+  "entries": {
+    "agent": {
+      "global_options": [
+        "--help",
+        "-h"
+      ],
+      "verbs": {
+        "assert": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": "",
+              "kind": "str",
+              "names": [
+                "macro"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": "",
+              "kind": "str",
+              "names": [
+                "sheet"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "clear"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": 35,
+              "kind": "int",
+              "names": [
+                "baseline"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": 120,
+              "kind": "float",
+              "names": [
+                "timeout"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": "",
+              "kind": "str",
+              "names": [
+                "log"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "backup": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": "",
+              "kind": "str",
+              "names": [
+                "tag"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "book": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [
+                "close",
+                "open"
+              ],
+              "default": null,
+              "kind": "choice",
+              "names": [
+                "action"
+              ],
+              "required": true
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "logs": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": "",
+              "kind": "str",
+              "names": [
+                "log"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": 40,
+              "kind": "int",
+              "names": [
+                "tail"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "metrics": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": "",
+              "kind": "str",
+              "names": [
+                "out"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "patch": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "file"
+              ],
+              "required": true
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-style"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "probe": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "strict"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "push": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "style": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [
+                "check",
+                "fix"
+              ],
+              "default": "check",
+              "kind": "choice",
+              "names": [
+                "action"
+              ],
+              "required": false
+            },
+            {
+              "choices": [
+                "all",
+                "call",
+                "eol",
+                "explicit"
+              ],
+              "default": "all",
+              "kind": "choice",
+              "names": [
+                "which"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": "src",
+              "kind": "str",
+              "names": [
+                "scope"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        }
+      }
+    },
+    "audit": {
+      "global_options": [
+        "--help",
+        "--interactive",
+        "-h",
+        "-i"
+      ],
+      "verbs": {
+        "common": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "out"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "exclude"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "md"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "project"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "indicators": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "out"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "exclude"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "ignore"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "strict"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "md"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "members": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "out"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "exclude"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "md"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "module"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "overview": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "out"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "exclude"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "ignore"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "strict"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "md"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "project"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "project": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "out"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "exclude"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "md"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "structure": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "out"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "exclude"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "append",
+              "names": [
+                "ignore"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "strict"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "md"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        }
+      }
+    },
+    "sync": {
+      "global_options": [
+        "--help",
+        "--interactive",
+        "--version",
+        "-h",
+        "-i"
+      ],
+      "verbs": {
+        "align": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "clean-backup": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "int",
+              "names": [
+                "keep"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": [],
+              "kind": "append",
+              "names": [
+                "keep-tag"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "doctor": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "gbk-export": {
+          "all_project": true,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all-project"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "init": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "dir"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "prefix"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "src"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "config"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "lab"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "list": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "plan": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [
+                "pull",
+                "push",
+                "run",
+                "watch"
+              ],
+              "default": "push",
+              "kind": "choice",
+              "names": [
+                "intent"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "promote": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "module"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "pull": {
+          "all_project": true,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all-project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-backup"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "pull-open": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-backup"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "push": {
+          "all_project": true,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "all-project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "doc-modules"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-save"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-backup"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "open-only"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "rollback-on-fail"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "run": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "macro"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": [],
+              "kind": "append",
+              "names": [
+                "arg"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "push"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "isolate"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "save"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": 40,
+              "kind": "int",
+              "names": [
+                "tail"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "log"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "log-optional"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "rollback-on-fail"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "shells": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [
+                "clean",
+                "create"
+              ],
+              "default": "create",
+              "kind": "choice",
+              "names": [
+                "mode"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "vbamod": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": true
+        },
+        "version": {
+          "all_project": false,
+          "apply": false,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "json"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": true,
+          "project": false
+        },
+        "watch": {
+          "all_project": false,
+          "apply": true,
+          "args": [
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-input"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "apply"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": null,
+              "kind": "str",
+              "names": [
+                "project"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": 1.0,
+              "kind": "float",
+              "names": [
+                "interval"
+              ],
+              "required": false
+            },
+            {
+              "choices": [
+                "ask",
+                "each",
+                "skip",
+                "src",
+                "vbe"
+              ],
+              "default": "ask",
+              "kind": "choice",
+              "names": [
+                "startup"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-save"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "no-backup"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": false,
+              "kind": "flag",
+              "names": [
+                "doc-modules"
+              ],
+              "required": false
+            },
+            {
+              "choices": [],
+              "default": 0,
+              "kind": "int",
+              "names": [
+                "seconds"
+              ],
+              "required": false
+            }
+          ],
+          "json_ok": false,
+          "project": true
+        }
+      }
+    }
+  },
+  "meta": {
+    "baseline_commit": "693d4911f6b5fb9d7df4f0b3164e58aa963be0c4",
+    "baseline_tag": "baseline-1.5.6",
+    "expected_envelope_keys": [
+      "ok",
+      "action",
+      "details",
+      "errors",
+      "elapsed_ms",
+      "ts",
+      "stats",
+      "exit_code"
+    ],
+    "normalization": "临时目录→<sandbox>，绝对路径→<path>，时间戳→<ts>",
+    "scope": "静态 argparse 面 + 解析层场景；不启动 Excel，不碰业务表"
+  },
+  "scenarios": [
+    {
+      "action": "",
+      "argv": [],
+      "case": "bare",
+      "elapsed_ms": 393,
+      "entry": "sync",
+      "envelope_keys": [],
+      "exit_code": 2,
+      "stderr": "",
+      "stdout_lines": 43
+    },
+    {
+      "action": "",
+      "argv": [
+        "__baseline_no_such_verb__"
+      ],
+      "case": "unknown-verb",
+      "elapsed_ms": 400,
+      "entry": "sync",
+      "envelope_keys": [],
+      "exit_code": 2,
+      "stderr": "usage: sync.py [-h] [-i] [--version] <动词> ...\nsync.py: error: argument <动词>: invalid choice: '__baseline_no_such_verb__' (choose from 'init', 'list', 'doctor', 'version', 'vbamod', 'plan', 'pull', 'pull-open', 'push', 'run', 'watch', 'shells', 'align', 'promote', 'gbk-export', 'clean-backup')\n",
+      "stdout_lines": 0
+    },
+    {
+      "action": "",
+      "argv": [],
+      "case": "bare",
+      "elapsed_ms": 352,
+      "entry": "audit",
+      "envelope_keys": [],
+      "exit_code": 2,
+      "stderr": "",
+      "stdout_lines": 18
+    },
+    {
+      "action": "",
+      "argv": [
+        "__baseline_no_such_verb__"
+      ],
+      "case": "unknown-verb",
+      "elapsed_ms": 344,
+      "entry": "audit",
+      "envelope_keys": [],
+      "exit_code": 2,
+      "stderr": "usage: audit.py [-h] [-i] <视角> ...\naudit.py: error: argument <视角>: invalid choice: '__baseline_no_such_verb__' (choose from 'members', 'common', 'project', 'structure', 'indicators', 'overview')\n",
+      "stdout_lines": 0
+    },
+    {
+      "action": "",
+      "argv": [],
+      "case": "bare",
+      "elapsed_ms": 342,
+      "entry": "agent",
+      "envelope_keys": [],
+      "exit_code": 2,
+      "stderr": "usage: agent.py [-h] <动词> ...\nagent.py: error: the following arguments are required: <动词>\n",
+      "stdout_lines": 0
+    },
+    {
+      "action": "",
+      "argv": [
+        "__baseline_no_such_verb__"
+      ],
+      "case": "unknown-verb",
+      "elapsed_ms": 347,
+      "entry": "agent",
+      "envelope_keys": [],
+      "exit_code": 2,
+      "stderr": "usage: agent.py [-h] <动词> ...\nagent.py: error: argument <动词>: invalid choice: '__baseline_no_such_verb__' (choose from 'probe', 'book', 'backup', 'patch', 'assert', 'push', 'style', 'logs', 'metrics')\n",
+      "stdout_lines": 0
+    },
+    {
+      "action": "sync.version",
+      "argv": [
+        "version",
+        "--json"
+      ],
+      "case": "version-json",
+      "elapsed_ms": 384,
+      "entry": "sync",
+      "envelope_keys": [
+        "action",
+        "details",
+        "elapsed_ms",
+        "errors",
+        "exit_code",
+        "ok",
+        "stats",
+        "ts"
+      ],
+      "exit_code": 1,
+      "stderr": "",
+      "stdout_lines": 1
+    }
+  ]
+}
