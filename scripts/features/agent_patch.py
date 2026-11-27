@@ -263,8 +263,40 @@ def _macro_exists(wb, macro: str) -> bool | None:
 
 def _ensure_active(xl, wb) -> None:
     """xl.Run 只跑活动工作簿的宏：切过去并核对，别让日志写到别的书里（踩过假失败）。"""
+    pid = _pid_from_xl(xl)
     for _ in range(5):
-        wb.Activate()
+        # 模态框会挡住 Activate；同进程的前台 MsgBox 也算目标不可切，不等到 5 次空转。
+        if pid:
+            blocked = _probe_dialog(pid)
+            if blocked is not None:
+                snippet = _dialog_snippet(getattr(blocked, "text", "")
+                                          or getattr(blocked, "title", ""))
+                if getattr(blocked, "kind", "") == dialogs.KIND_COMPILE_ERROR:
+                    raise Failure(
+                        f"检测到 VBE 编译错误框「{getattr(blocked, 'title', '')}」（{snippet}）",
+                        code="VBE_COMPILE_ERROR", stage=Stage.VBE,
+                        hint=(f"弹窗标题：{getattr(blocked, 'title', '') or '（读不到标题）'}；"
+                              f"正文：{snippet}。先修 VBA 编译错误，再重跑 agent assert"),
+                        suggested="在 VBE 里修掉编译错误并编译通过后重跑",
+                        retryable=False,
+                    )
+                raise Failure(
+                    f"检测到 Excel 模态框「{getattr(blocked, 'title', '')}」挡住「{wb.Name}」"
+                    f"（{snippet}）",
+                    code="TARGET_NOT_ACTIVE", stage=Stage.ATTACH,
+                    hint="先关掉挡在前面的 MsgBox/InputBox 或受保护视图，确认目标工作簿是活动簿后重跑",
+                    suggested="先处理前台弹窗，再重跑 agent assert；不要把弹窗留在 Excel 进程里",
+                    retryable=False,
+                )
+        try:
+            wb.Activate()
+        except Exception as exc:  # noqa: BLE001 - COM 拒绝切换统一报目标不可切
+            raise Failure(
+                f"切不到「{wb.Name}」：{exc}",
+                code="TARGET_NOT_ACTIVE", stage=Stage.ATTACH,
+                suggested="先关掉挡在前面的弹窗/受保护视图，确认目标工作簿是活动簿后重跑",
+                retryable=False,
+            ) from exc
         time.sleep(0.4)
         if str(xl.ActiveWorkbook.Name) == str(wb.Name):
             return
@@ -440,6 +472,58 @@ def _run_assert_macro(runner, macro: str):
         raise
 
 
+def _make_assert_runner(path: Path, open_hint: str, open_cmd: str):
+    """在调用线程里重新附着目标簿，返回可执行宏的 runner。
+
+    真实 assert 的看门狗线程不能复用主线程的 COM 代理，所以在 worker 内
+    ``CoInitialize`` 后按路径重新 attach；找不到目标簿仍走 TARGET_NOT_OPEN，
+    不把断开的代理硬塞给 MacroRunner。
+    """
+    xl2 = excel_gateway.attach_running_excel(path, target_hint=open_hint,
+                                             target_suggested=open_cmd)
+    wb2, opened2 = excel_gateway.find_open_workbook(xl2, path)
+    if wb2 is None:
+        lines = [f"目标工作簿没打开：{path}"]
+        lines += [f"  当前打开：{p}" for p in opened2]
+        raise Failure("\n".join(lines), code="TARGET_NOT_OPEN", stage=Stage.ATTACH,
+                      hint=open_hint, suggested=open_cmd)
+    _ensure_active(xl2, wb2)
+    session = WorkbookSession(target=str(path), state=TargetState.OPEN_CLEAN,
+                              purpose=Purpose.ASSERT, workbook=wb2)
+    return MacroRunner(session)
+
+
+def _run_assert_watched(path: Path, macro: str, timeout: float,
+                        open_hint: str, open_cmd: str, *,
+                        runner_factory=None):
+    """在 daemon worker 里执行断言宏，主线程只等 ``timeout``。
+
+    ``runner_factory`` 是单测缝：默认走真实 attach；传入桩时不开 Excel。
+    worker 内显式 ``CoInitialize`` / ``CoUninitialize``，宏超时后不 join 慢线程，
+    与 watchdog 原语“只停止等待、不强行结束 Excel”一致。
+    """
+    def worker():
+        pythoncom = None
+        try:
+            try:
+                import pythoncom as _pythoncom  # type: ignore
+                _pythoncom.CoInitialize()
+                pythoncom = _pythoncom
+            except Exception:  # noqa: BLE001 - 无 pywin32 时仍允许纯桩测试
+                pythoncom = None
+            factory = runner_factory or _make_assert_runner
+            runner = factory(path, open_hint, open_cmd)
+            return _run_assert_macro(runner, macro)
+        finally:
+            if pythoncom is not None:
+                try:
+                    pythoncom.CoUninitialize()
+                except Exception:  # noqa: BLE001 - 收尾失败不覆盖宏结果
+                    pass
+
+    return watchdog.run_with_watchdog(worker, timeout)
+
+
 def handle_assert(ctx) -> Outcome:
     args = ctx.args
     proj, path = _pick(ctx, getattr(args, "project", None))
@@ -477,17 +561,21 @@ def handle_assert(ctx) -> Outcome:
     folder = Path(args.log) if getattr(args, "log", "") else _log_dir_of(proj)
     before = {f.name for f in folder.glob("*.log")} if folder.is_dir() else set()
 
-    session = WorkbookSession(target=str(path), state=TargetState.OPEN_CLEAN,
-                              purpose=Purpose.ASSERT, workbook=wb)
-    runner = getattr(ctx, "runner", None) or MacroRunner(session)
-
     t0 = time.time()
     deadline = t0 + args.timeout if args.timeout > 0 else None
-    result = _run_assert_macro(runner, macro)
+    try:
+        if getattr(ctx, "runner", None) is not None:
+            # 单测/注入 runner 走同步路径，保留 timed_out 桩语义。
+            result = _run_assert_macro(ctx.runner, macro)
+        else:
+            # 真实路径必须走线程看门狗；不能再直接同步 Application.Run。
+            result = _run_assert_watched(path, macro, args.timeout,
+                                         open_hint, open_cmd)
+    except watchdog.WatchdogTimeout:
+        raise _classify_watchdog_timeout(xl, timeout=args.timeout)
 
     if getattr(result, "timed_out", False):
-        # 超时二次分类：先判实例是否退出（EXCEL_CLOSED 优先），再认编译错误框 /
-        # 模态框；判不出才回退通用 WATCHDOG_TIMEOUT（不强行结束用户已打开的 Excel）。
+        # 兼容旧 runner 桩；真实路径由上面的 WatchdogTimeout 分支接管。
         raise _classify_watchdog_timeout(xl, timeout=args.timeout)
 
     human.append(f"Run 结束，用时 {time.time() - t0:.1f}s")

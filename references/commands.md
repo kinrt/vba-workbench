@@ -34,7 +34,7 @@ python tests/tools/gen_commands_md.py
 | `run`<br>写回（可选）→运行宏→取返回值与日志尾部 | `--macro`；`--arg`（可重复）；`--push`；`--isolate`；`--save`；`--tail`（整数）；`--log`；`--log-optional`；`--rollback-on-fail`；`--project` 必填 | 主操作只读，附带开关写入文件 | 0/1/2 | 是 | contract.run.success, contract.run.failed, contract.run.usage, contract.run.json | references/sync-commands.md#run |
 | `scrub`<br>按 scrub.deny 扫交付件，命中退出 1 | `--path`（路径） | 只读 | 0/1/2 | 是 | contract.scrub.success, contract.scrub.hit, contract.scrub.config-invalid | references/sync-commands.md#scrub |
 | `shells`<br>公共库占位壳（同名一行注释，写回时跳过） | `--mode`（create|clean） | 默认预览，--apply 才写入文件 | 0/1/2 | 是 | contract.shells.create, contract.shells.clean | references/sync-commands.md#shells |
-| `vbamod`<br>核对各工作簿的模块清单（和最近一次备份比） | `--project` 可选 | 只读 | 0/1/2 | 是 | contract.vbamod.success, contract.vbamod.not_found, contract.vbamod.usage, contract.vbamod.json | references/sync-commands.md#vbamod |
+| `vbamod`<br>核对各工作簿的模块清单与正文（和最近一次备份比） | `--project` 可选 | 只读 | 0/1/2 | 是 | contract.vbamod.success, contract.vbamod.not_found, contract.vbamod.usage, contract.vbamod.json | references/sync-commands.md#vbamod |
 | `version`<br>核对公共库版本与各项目锁定版本 | — | 只读 | 0/1/2 | 是 | contract.version.success, contract.version.mismatch | references/sync-commands.md#version |
 | `watch`<br>常驻监听：源码一变就写回已打开的工程 | `--interval`（小数）；`--startup`（ask|src|vbe|each|skip）；`--no-save`；`--no-backup`；`--doc-modules`；`--seconds`（整数）；`--project` 可选 | 常驻运行（不支持 --json） | 0/1/2 | 否 | contract.watch.success, contract.watch.failed, contract.watch.usage, contract.watch.reject_json | references/sync-commands.md#watch |
 

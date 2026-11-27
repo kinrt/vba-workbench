@@ -2,6 +2,20 @@
 
 按「对外可见的行为变化」记；每条带日期与提交号（内部重构只在提交信息里写）。
 
+## 1.7.0 — 2026-11-27（开发中：真实环境验证前移）
+
+**主题：把 `audit -i` 菜单、`vbamod` 正文 diff 与 `assert` 看门狗接线收进 1.7；G-01 落 Excel golden 证据工具，G-03 已做真实 Excel MsgBox 与跨进程 PID，其余不可自动构造项如实登记 not_run。**
+
+- **`audit -i` 菜单**：新增 `features/audit_menu.py`，8 项菜单覆盖盘模块、公共库、项目依赖面、全仓、结构体检、指标体检、导出 Markdown、显示设置；只读动作结束回菜单，非 TTY 仍退出 1。
+- **`vbamod` 正文 diff**：`toolkit/vbabin.py` 增加 MS-OVBA 2.4.1.3 解压与 `Attribute` 归一，`sync.py vbamod` 输出 `content_same / changed / content_compared / content_error`；模块集合一致不再等同于正文一致。
+- **`assert` 看门狗接线**：真实 `agent assert` 改由 worker 线程执行，worker 内 `CoInitialize` 并重新 attach 目标簿；超时由 `run_with_watchdog` 抛出，再按目标 PID 分类 `EXCEL_CLOSED / VBE_COMPILE_ERROR / WATCHDOG_TIMEOUT`。注入 runner 的单测路径保持同步，旧 `timed_out` 桩语义不变。
+- **Excel golden 证据工具**：新增 `tests/tools/excel_golden.py`，只做 `prepare / record / verify / report`；工作簿、源码、备份批次、`.run` journal、GBK 产物全部落仓库根 `.lab/golden`，原始证据不入库。已录 17 个 case：12 recorded / 5 not_run，`verify` 通过 17。
+  - 已录：状态 4（closed / open-clean / open-dirty / readonly）、文件副作用 3（pull / push / gbk-export）、宏 2（isolate / assert）、弹窗 3（Excel MsgBox / 跨进程 PID / TARGET_NOT_ACTIVE）。
+  - not_run：`OPEN_PROTECTED`（工程密码只能 VBE 手工设）、`OPEN_BUSY`（由 Excel MsgBox 覆盖）、`COM_CONTEXT`（不破坏本机会话强造）、`VBE_COMPILE_ERROR`（自动化路径实际 `RUN_FAILED`）、通用 VBE 模态（需 GUI 手工构造）。
+- **`assert` 前台弹窗预检**：`_ensure_active` 在切目标簿前先按 PID 探测模态框；同进程有 MsgBox/InputBox 挡住时直接报 `TARGET_NOT_ACTIVE / stage=attach`，不再空转 5 次后误跑成功；编译错误框单独报 `VBE_COMPILE_ERROR / stage=vbe`。
+- **版本口径**：`VERSION` 1.7.0；`SKILL.md` metadata 同步；`tests/baseline/1.5.6/coverage.json` 只回填 golden 状态与复跑命令，不向旧基线塞原始文件。
+- **测试**：全量 `unittest discover` 609 例通过 / 1 skip / 0 failure（2026-11-27）。
+
 ## 1.6.13 — 2026-11-26（交互菜单重构与公开文档收口）
 
 **主题：重做 `sync -i` 启动菜单，把新建项目改成拖入工作簿自动登记；同步补齐公开仓库的 README、架构说明与脱敏口径。**
@@ -85,9 +99,9 @@
 - 测试基线：**549 例 / 547 通过 / skipped 2 / 0 failure / 0 error**；`compileall` 通过。
 - 安装副本：**1.6.7 已装到 `<安装副本>`**；73 个交付件，`doctor --verify-package` 通过（version_match true）。
 
-## 1.7.0（开发中，未发布）
+## 1.6.3-local 开发记录（历史，已并入 1.6.4–1.6.8）
 
-**主题：1.6.3-local 评审批次回补看门狗 / 弹窗 / PID 原语与交互菜单，features 按职责四处拆分，补 1.5.6 基线覆盖台账；命令面仍为 31 条，不新增业务动词。源码基线已推进到 1.6.6，1.7.0 仍在开发中；本段落仅登记开发中进展，未定版、未打包、未升级安装副本。**
+**说明：本段原标为“1.7.0（开发中，未发布）”，实际是 1.6.3-local 评审批次的历史日志；下列条目均已并入 1.6.4–1.6.8，不是当前 1.7.0 的计划。当前 1.7.0 见顶部；历史命令面 31 条，当前为 32 条（新增 `sync.scrub` 等发布入口，不新增业务动词）。**
 
 - **`sync -i` 交互菜单回补**（B6，commit `cf30b95`）：新增 `features/sync_interactive.py`，列项目 → 选项目 → 列动作 → 确认 → 复用 registry 既有 handler 执行；菜单层不碰 COM、不写盘，默认预览口径，写盘动词不带 `--apply`；非 TTY 仍由入口壳 `ensure_interactive` 人话退出 1。
 - **`EXCEL_CLOSED` 优先于超时码**（B4，commit `0e5d047`）：看门狗等待期间按 PID 三态存活二次分类，目标实例已退出报 `EXCEL_CLOSED`（`stage=assert`），优先于 `WATCHDOG_TIMEOUT`；探测未知不把权限问题误报成崩溃。

@@ -143,6 +143,6 @@
 
 | 项 | 状态 | 说明 |
 |---|---|---|
-| 4 个 agent 动词 CLI `--json` 端到端接受度 | pending，待裁决 | `agent.assert` / `agent.patch` / `agent.metrics` / `agent.style` 的 CLI `--json` 接受度为真差异，未登记白名单（`test_release_diff.KNOWN_REAL_GAPS`）；进程内单行信封渲染有测试，端到端行为待 07 切片复核裁决后补录台账 |
-| `sync.shells` 业务失败用例 | 缺例 | 仅有 create/clean 预览与非法 `--mode` 用法错，缺目标缺失 / 预检失败类业务失败证据（台账 `business_fail` missing 动词） |
-| 三类 golden 未录制 | 待带 Excel 会话环境录制 | Excel 状态 golden（CLOSED / OPEN_CLEAN / OPEN_DIRTY / OPEN_PROTECTED / OPEN_BUSY / READONLY / COM_UNAVAILABLE）、文件副作用 golden（文件树前后 / 备份批次 / journal / 写入文件哈希）、真实宏执行 golden（宏结果 / 断言重试计数 / 保存回滚链路）；本轮不启动 Excel、COM 全打桩，待本地集成环境录制回填 `tests/baseline/1.5.6/` |
+| 4 个 agent 动词 CLI `--json` 端到端接受度 | 已关闭（1.6.8） | `agent.assert` / `agent.patch` / `agent.metrics` / `agent.style` 的 `--json` 接受度已由 `tests/test_agent_json.py::test_metrics_patch_assert_json_acceptance` 提供进程内 CLI 证据，`style` 另有端到端用例；`test_release_diff.KNOWN_REAL_GAPS` 已清空，台账改 `verified`，不再作为待裁决真差异 |
+| `sync.shells` 业务失败用例 | 已裁定：设计不适用 | `shells()` 是全局命令，无项目/目标参数；项目缺失或无公共模块均按空结果降级，`ok=true`，不产生“目标缺失/预检失败”业务失败面。既有设计，不补失败码，台账记 `not_applicable`，不计缺例（见 `release-acceptance-1.6.8.md` §6） |
+| 三类 golden | 已录 12/17（2026-11-27） | Excel 状态 4 项、文件副作用 3 项、真实宏执行 2 项、真实弹窗 3 项已录；5 项 not_run：`OPEN_PROTECTED`（工程密码只能 VBE 手工设）、`OPEN_BUSY`（已由 Excel MsgBox 覆盖）、`COM_CONTEXT`（不破坏本机会话强造）、`VBE_COMPILE_ERROR`（自动化路径实际 `RUN_FAILED`）、通用 VBE 模态（需 GUI）。证据在 `.lab/golden`，复跑 `tests/tools/excel_golden.py`；不向 `tests/baseline/1.5.6/` 塞原始文件 |

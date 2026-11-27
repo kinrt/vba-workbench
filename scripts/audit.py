@@ -21,17 +21,16 @@ from toolkit.cli import (add_interactive_arg, add_version_arg, apply_no_input,  
                          ensure_interactive, entry, run_cli, run_dispatch)
 from toolkit.commands import specs_for
 from toolkit.registry import build_parser, dispatch
-from toolkit.contract import ErrorCode, Failure, Stage  # noqa: E402
 from toolkit.context import AppContext
 
 TOOL = "audit"
 
 
 def _interactive() -> int:
-    """-i 菜单入口：先把关终端；菜单本体由后续切片接入。"""
+    """-i 菜单入口：先把关终端，再交给 audit_menu 本体。"""
     ensure_interactive()
-    raise Failure("交互菜单将在后续切片接入；请改用子命令（见 --help）。",
-                  code=ErrorCode.UNSUPPORTED_OPERATION, stage=Stage.CONTRACT)
+    from features.audit_menu import interactive_entry
+    return interactive_entry()
 
 
 def main(argv=None) -> int:

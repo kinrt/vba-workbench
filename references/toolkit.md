@@ -87,7 +87,7 @@ base ─┬─ config
 | `vba_parse` | 纯文本处理，不懂业务；含**代码规则扫描**（裸 New／手写加速／缺过程注释） | `split_lines` `code_lines` `split_code_comment` `mask_strings` `strip_export_header` `parse_members` `is_event_proc` `norm_code_lines` `fold_lines` `strip_vba_lines` `declared_procs` `scan_rules` |
 | `excel` | **COM 边界层**：起实例、连已开实例、按路径找工作簿、打开工作簿、识别工程状态（受密码保护/没授权/只在源码）、工程组件查找与增删替换、整工作簿备份 | `new_excel` `quit_owned` `ExcelSession` `attach_running_excel` `reset_rot_unreachable` `com_call` `find_open_workbook` `require_open_workbook` `open_disk_workbook` `backup_workbook` `vbe_state` `vbe_state_hint` `has_vbproject_access` `ensure_vbe_access` `find_component` `component_snapshot` `remove_module` `replace_module_code` |
 | `watch` | **纯 stat** 的文件监听：快照、文件落在哪个源码根、连续两轮确认后才算"改完了" | `snap`→`watch_snapshot` `root_of`→`watch_root_of` `changed`→`watch_changed` |
-| `vbabin` | 只读解析 xlsm 里的 `vbaProject.bin`：列模块、比对两份的模块集合（不碰 Excel、不需要工程密码） | `read_vba_bin` `vba_models` `vba_module_names` `compare_vba_modules` |
+| `vbabin` | 只读解析 xlsm 里的 `vbaProject.bin`：列模块、解压模块正文、比对两份的模块集合与正文（不碰 Excel、不需要工程密码） | `read_vba_bin` `vba_models` `vba_module_names` `vba_module_sources` `compare_vba_modules` |
 | `app_guard` | **Application 状态还原**：运行宏/写回前后把事件响应、屏幕刷新、警告提示、状态栏、计算模式、剪切状态恢复为可用状态（默认钉手动计算） | `guard`（`with` 用） `AppGuard`（`changes` / `describe()`） `restore`（只还原） `calc_mode` |
 | `ui` | 终端排版 + 所有键盘交互 | `SEP` `section` `grid` `read_line` `pause` `choose` `ask_yes` `run_action` `pick_list` `pick_list_default` `pick_grouped` `run_menu` |
 | `watchdog` | **与 Excel/COM 无关**的并发与进程探测骨架：守护线程硬超时、三态存活探测、句柄反查 PID；不抛业务失败码，错误码分类由上层编排层完成 | `WatchdogTimeout` `run_with_watchdog` `pid_alive` `pid_from_hwnd` |
@@ -178,11 +178,11 @@ python -m toolkit.vbabin 表.xlsm              :: 列模块清单
 python -m toolkit.vbabin 前.xlsm 后.xlsm      :: 比对模块集合
 ```
 
-日常更省事的入口是菜单“核对模块清单” / `python vba-workbench\scripts\sync.py vbamod --project 示例表A`：
+日常更省事的入口是菜单“核对模块清单与正文” / `python vba-workbench\scripts\sync.py vbamod --project 示例表A`：
 它自动到 `.backup` 里找这个工作簿**最近一份备份**（按备份目录名的时戳排，不按文件 mtime——
 `copy2` 会保留源文件时间，按 mtime 会选错），然后打印模块数、缓存数、消失/新增清单。
 
-局限：它只回答"哪些模块在、哪些没了"，**不回答"哪个模块的代码变了"**（比内容要解压 MS-OVBA 的字符流，尚未实现）。
+能力：模块集合 + 模块正文。它按 MS-OVBA 2.4.1.3 解压每个模块的 `CompressedSourceCode`，统一 CRLF / CR 并剔除 `Attribute` 元数据行后比较，所以能回答“哪个模块的代码变了”；解压失败时只报“正文未比对”，不会把未比对当成“一致”。
 
 ### Excel / VBE 的 COM 边界（`excel`）
 

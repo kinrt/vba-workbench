@@ -31,14 +31,17 @@ toolkit.vbabin —— 只读解析 xlsm / xlsb 里的 vbaProject.bin，列模块
       内部流（dir / _VBA_PROJECT / PROJECT / PROJECTwm / PROJECTlk，
       以及带控制前缀的 \\x01CompObj / \\x03VBFrame，还有 f / o 子流）
       和编译缓存（__SRP_*）不参与模块清单。
-    · 不认得：模块**内容**。比内容要比字符流（还没实现解压 MS-OVBA），
-      所以本模块只回答"哪些模块在、哪些没了"，不回答"哪个模块的代码变了"。
-    · 局限：理论上存在名为 `f` / `o` 的模块会被误判成内部流（VBA 里几乎不可能出现）。
+    · 认得：模块正文。模块流 = MODULEOFFSET 字节的 PerformanceCache + 一段
+      MS-OVBA 压缩的 CompressedSourceCode；本模块按 MS-OVBA 2.4.1.3 解压后，
+      统一换行并剔除 Attribute 元数据行再比较，所以能回答"哪个模块的代码变了"，
+      不只回答"模块在不在"。
+    · 局限：解压失败时只报"内容未比对"，不会把未比对当成"内容一致"；
+      理论上存在名为 `f` / `o` 的模块会被误判成内部流（VBA 里几乎不可能出现）。
 
 【什么时候该用】
-    · push / 批量写回 / watch 写完之后自查：模块数有没有变、有没有整块消失；
+    · push / 批量写回 / watch 写完之后自查：模块数有没有变、内容有没有变；
     · 排查"表里代码和源码不一致""写回把模块写没了"这类问题；
-    · 写回前后的自动化回归：diff["same"] 为 False 就报警。
+    · 写回前后的自动化回归：diff["same"] / diff["content_same"] 任一为 False 就报警。
 """
 
 from __future__ import annotations
@@ -195,6 +198,132 @@ def vba_models(data: bytes) -> tuple[list[str], list[str]]:
     return modules, cache
 
 
+def decompress_vba_stream(data: bytes) -> bytes:
+    """按 MS-OVBA 2.4.1.3 解压 CompressedContainer（模块正文 / dir 流）。
+
+    调用方通常从模块流的第一个 0x01 压缩容器开始传入；本函数不负责找
+    PerformanceCache 与 CompressedSourceCode 的分界。
+    """
+    if not data:
+        return b""
+    if data[0] != 0x01:
+        raise Failure("VBA 压缩流签名不是 0x01，无法解压")
+    out = bytearray()
+    pos = 1
+    while pos < len(data):
+        if pos + 2 > len(data):
+            raise Failure("VBA 压缩流在 chunk 头处截断")
+        chunk_start_byte = pos
+        header = struct.unpack_from("<H", data, pos)[0]
+        pos += 2
+        chunk_size = (header & 0x0FFF) + 3
+        signature = (header >> 12) & 0x07
+        if signature != 0b011:
+            # 末尾全 0 填充：不是坏流，直接结束
+            if all(b == 0 for b in data[chunk_start_byte:]):
+                break
+            raise Failure("VBA 压缩流 chunk 签名不是 0b011")
+        compressed = bool((header >> 15) & 0x01)
+        chunk_end = min(len(data), chunk_start_byte + chunk_size)
+        chunk_start = len(out)
+        if not compressed:
+            out.extend(data[pos:chunk_end])
+            pos = chunk_end
+            continue
+        while pos < chunk_end:
+            flag = data[pos]
+            pos += 1
+            for bit in range(8):
+                if pos >= chunk_end:
+                    break
+                if (flag >> bit) & 1 == 0:
+                    out.append(data[pos])
+                    pos += 1
+                    continue
+                if pos + 2 > chunk_end:
+                    raise Failure("VBA 压缩流 CopyToken 截断")
+                token = struct.unpack_from("<H", data, pos)[0]
+                pos += 2
+                length, offset = unpack_copy_token(token, len(out), chunk_start)
+                copy_source = len(out) - offset
+                if copy_source < chunk_start:
+                    raise Failure("VBA 压缩流 CopyToken 越界")
+                # 允许重叠复制（RLE），必须逐字节 append
+                for index in range(length):
+                    out.append(out[copy_source + index])
+        pos = chunk_end
+    return bytes(out)
+
+
+def unpack_copy_token(token: int, decompressed_current: int,
+                      decompressed_chunk_start: int) -> tuple[int, int]:
+    """MS-OVBA 2.4.1.3.19.2：返回 (length, offset)，offset 从 1 开始。"""
+    difference = decompressed_current - decompressed_chunk_start
+    bit_count = max(4, (difference - 1).bit_length() if difference > 1 else 0)
+    length_mask = 0xFFFF >> bit_count
+    offset_mask = (~length_mask) & 0xFFFF
+    length = (token & length_mask) + 3
+    offset = ((token & offset_mask) >> (16 - bit_count)) + 1
+    return length, offset
+
+
+def find_compressed_start(stream: bytes) -> tuple[int, bytes]:
+    """在模块流里找 CompressedSourceCode 起点：PerformanceCache 之后第一个
+    解压后以 `Attribute VB_Name` 开头的合法容器；找不到再退回首个可解压候选。
+    """
+    if not stream:
+        return 0, b""
+    fallback: tuple[int, bytes] | None = None
+    for start in range(0, len(stream) - 2):
+        if stream[start] != 0x01:
+            continue
+        header = struct.unpack_from("<H", stream, start + 1)[0]
+        if (header >> 12) & 0x07 != 0b011:
+            continue
+        chunk_size = (header & 0x0FFF) + 3
+        if not 3 <= chunk_size <= 4098:
+            continue
+        try:
+            source = decompress_vba_stream(stream[start:])
+        except (Failure, struct.error):
+            continue
+        if source.startswith(b"Attribute VB_Name"):
+            return start, source
+        if fallback is None:
+            fallback = (start, source)
+    if fallback is not None:
+        return fallback
+    raise Failure("模块流里找不到合法的 MS-OVBA 压缩容器")
+
+
+def normalize_vba_source(data: bytes) -> bytes:
+    """比较用归一：统一 CRLF / CR 为 LF，去掉 Attribute 元数据行与首尾 NUL。"""
+    text = data.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    lines = [line for line in text.split(b"\n")
+             if not line.lstrip(b"\xef\xbb\xbf").startswith(b"Attribute ")]
+    return b"\n".join(lines).strip(b"\x00")
+
+
+def module_sources_from_bin(data: bytes) -> dict[str, bytes]:
+    """从 vbaProject.bin 取每个模块的正文（已解压、已归一换行）。"""
+    ole = _Ole(data)
+    modules, _ = vba_models(data)
+    sources: dict[str, bytes] = {}
+    for name in modules:
+        stream = ole.stream(name)
+        if not stream:
+            sources[name] = b""
+            continue
+        _offset, source = find_compressed_start(stream)
+        sources[name] = normalize_vba_source(source)
+    return sources
+
+
+def vba_module_sources(path: str | Path) -> dict[str, bytes]:
+    """公开入口：xlsm / xlsb / vbaProject.bin -> {模块名: 解压后的正文 bytes}。"""
+    return module_sources_from_bin(read_vba_bin(path))
+
+
 def vba_module_names(path: str | Path) -> list[str]:
     """只要模块名清单：vba_module_names("示例表A.xlsm") -> ["Sheet1", "表格工具", ...]"""
     return vba_models(read_vba_bin(path))[0]
@@ -261,24 +390,50 @@ def sheet_pages(path: str | Path) -> list[dict]:
 
 def compare_vba_modules(before: str | Path, after: str | Path) -> dict:
     """
-    比对两份文件（xlsm 或 vbaProject.bin）的模块集合。返回:
+    比对两份文件（xlsm 或 vbaProject.bin）的模块集合与模块正文。返回:
         count_before / count_after : 模块数
         lost / added               : 只在前者 / 只在后者 的模块名（已排除 __SRP 缓存）
+        changed                    : 两边都有、但正文不同的模块名
         cache_before / cache_after : 编译缓存数（每次重编译都会变，不算异常）
-        same                       : 模块集合是否完全一致
+        same                       : 模块集合是否完全一致（保持旧语义）
+        content_same               : 模块集合与正文是否都一致；解压失败时为 None
+        content_compared           : 正文是否完成比对
+        content_error              : 正文未比对时的原因
     """
-    mo_before, cache_before = vba_models(read_vba_bin(before))
-    mo_after, cache_after = vba_models(read_vba_bin(after))
+    before_data = read_vba_bin(before)
+    after_data = read_vba_bin(after)
+    mo_before, cache_before = vba_models(before_data)
+    mo_after, cache_after = vba_models(after_data)
     lost = sorted(set(mo_before) - set(mo_after))
     added = sorted(set(mo_after) - set(mo_before))
+    changed: list[str] = []
+    content_same: bool | None = True
+    content_error = ""
+    try:
+        sources_before = module_sources_from_bin(before_data)
+        sources_after = module_sources_from_bin(after_data)
+        for name in sorted(set(mo_before) & set(mo_after)):
+            if sources_before.get(name, b"") != sources_after.get(name, b""):
+                changed.append(name)
+        if lost or added:
+            content_same = False
+        else:
+            content_same = not changed
+    except Failure as e:
+        content_same = None
+        content_error = str(e)
     return {
         "count_before": len(mo_before),
         "count_after": len(mo_after),
         "lost": lost,
         "added": added,
+        "changed": changed,
         "cache_before": len(cache_before),
         "cache_after": len(cache_after),
         "same": not lost and not added,
+        "content_same": content_same,
+        "content_compared": not content_error,
+        "content_error": content_error,
     }
 
 
@@ -288,9 +443,17 @@ def _print_report(diff: dict, before: str, after: str) -> None:
     msg(f"模块数：{diff['count_before']} → {diff['count_after']}")
     msg(f"编译缓存（__SRP，会随重编译增减，不算异常）："
         f"{diff['cache_before']} → {diff['cache_after']}")
-    if diff["same"]:
-        msg("模块集合：完全一致")
-        return
+    if diff["changed"]:
+        msg(f"[内容变化] {len(diff['changed'])} 个：{'、'.join(diff['changed'])}")
+    if diff["content_compared"]:
+        if diff["same"] and not diff["changed"]:
+            msg("模块集合与正文：完全一致")
+        elif diff["same"]:
+            msg("模块集合：一致；正文有变化（见上）")
+        else:
+            msg("模块集合：有差异")
+    else:
+        msg(f"模块正文未比对：{diff['content_error']}")
     if diff["lost"]:
         msg(f"[消失] {len(diff['lost'])} 个：{'、'.join(diff['lost'])}")
     if diff["added"]:
@@ -312,7 +475,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     msg("用法：")
     msg("  python -m toolkit.vbabin 表.xlsm            列模块清单")
-    msg("  python -m toolkit.vbabin 前.xlsm 后.xlsm   比对模块集合")
+    msg("  python -m toolkit.vbabin 前.xlsm 后.xlsm   比对模块集合与正文")
     return 2
 
 

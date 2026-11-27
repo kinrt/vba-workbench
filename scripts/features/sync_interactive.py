@@ -35,7 +35,7 @@ PROJECT_ACTIONS: tuple[tuple[str, str], ...] = (
     ("push", "写回源码 src→VBE"),
     ("align", "换公共库占位壳"),
     ("gbk-export", "导出 GBK 副本"),
-    ("vbamod", "核对模块清单（只读）"),
+    ("vbamod", "核对模块清单与正文（只读）"),
     ("watch", "常驻自动写回"),
 )
 

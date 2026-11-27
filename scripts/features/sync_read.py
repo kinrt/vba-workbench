@@ -276,10 +276,10 @@ def _verify_export_set(wb, out_dir: Path, common_stems: set[str] | None,
 # 动词 handler：每个返回 Outcome
 # ---------------------------------------------------------------------------
 def vbamod(ctx) -> Outcome:
-    """核对各表模块清单（和最近一次备份比）；只读 vbaProject.bin，不需要 Excel。"""
+    """核对各表模块清单与正文（和最近一次备份比）；只读 vbaProject.bin，不需要 Excel。"""
     cfg = ctx.config
     args = ctx.args
-    notes = Notes("核对模块清单提醒")
+    notes = Notes("核对模块清单与正文提醒")
     human: list[str] = []
     warnings: list[str] = []
     errors: list[Failure] = []
@@ -334,14 +334,36 @@ def vbamod(ctx) -> Outcome:
                 diff = compare_vba_modules(backup, path)
                 row.update(compared=True, same=bool(diff["same"]), status="已比对",
                            count_before=diff["count_before"], count_after=diff["count_after"],
-                           lost=diff["lost"], added=diff["added"])
+                           lost=diff["lost"], added=diff["added"],
+                           content_same=diff["content_same"],
+                           changed=diff["changed"],
+                           content_compared=diff["content_compared"],
+                           content_error=diff["content_error"])
+                if diff["content_compared"]:
+                    if diff["changed"]:
+                        human.append(f"  正文变化 {len(diff['changed'])} 个：{'、'.join(diff['changed'])}")
+                    elif diff["same"]:
+                        human.append("  正文与备份一致")
+                else:
+                    human.append(f"  正文未比对：{diff['content_error']}")
                 if diff["same"]:
                     notes.add("校验", f"{proj_name}：模块集合与备份一致（{diff['count_after']} 个）✔")
+                    if diff["content_same"] is True:
+                        notes.add("校验", f"{proj_name}：模块正文与备份一致 ✔")
+                    elif diff["content_compared"]:
+                        notes.add("警告", f"{proj_name}：模块集合一致，但正文有变化："
+                                  f"{'、'.join(diff['changed'])}")
+                    else:
+                        notes.add("警告", f"{proj_name}：模块集合一致；正文未比对："
+                                  f"{diff['content_error']}")
                 else:
                     if diff["lost"]:
                         notes.add("警告", f"{proj_name}：比备份少了模块 {'、'.join(diff['lost'])}")
                     if diff["added"]:
                         notes.add("警告", f"{proj_name}：比备份多了模块 {'、'.join(diff['added'])}")
+                    if diff["changed"]:
+                        notes.add("警告", f"{proj_name}：共同模块正文有变化："
+                                  f"{'、'.join(diff['changed'])}")
     except BaseFailure as e:
         errors.append(to_contract_failure(e))
 
@@ -668,7 +690,7 @@ def _finish(action: str, rows: list[dict], errors: list[Failure], human: list[st
 
     结果集按 1.5.6 旧形状留在 ``stats.results``；``details`` 不承担命令结果行。
     """
-    human.extend(notes.render("核对模块清单提醒"))
+    human.extend(notes.render("核对模块清单与正文提醒"))
     stats = {"examined": len(rows),
              "changed": sum(1 for r in rows if r.get("same") is False),
              "unverifiable": sum(1 for r in rows if not r.get("compared")),
@@ -685,7 +707,7 @@ SPECS = (
         verb="vbamod", entry="sync", handler="features.sync_read:vbamod",
         mutation=MutationMode.NONE, project=ProjectMode.OPTIONAL,
         supports_json=True, exit_codes=(0, 1, 2),
-        summary="核对各工作簿的模块清单（和最近一次备份比）",
+        summary="核对各工作簿的模块清单与正文（和最近一次备份比）",
         ref="references/sync-commands.md#vbamod",
         tests=("contract.vbamod.success", "contract.vbamod.not_found",
                "contract.vbamod.usage", "contract.vbamod.json"),

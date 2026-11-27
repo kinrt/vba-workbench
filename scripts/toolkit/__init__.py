@@ -77,8 +77,9 @@ from .vba_parse import (EVENT_SUFFIX, MEMBER_END_RE, MEMBER_FIELD_RE,
                         norm_code_lines, parse_members, scan_rules, split_code_comment,
                         split_lines, strip_export_header, strip_vba_comments,
                         strip_vba_lines)
-from .vbabin import (compare_vba_modules, read_vba_bin, sheet_pages,
-                     vba_documents, vba_module_names, vba_models)
+from .vbabin import (compare_vba_modules, decompress_vba_stream, read_vba_bin,
+                     sheet_pages, vba_documents, vba_module_names,
+                     vba_module_sources, vba_models)
 # style_rules 是"只动 src 文本"的风格规则层（行尾/BOM、调用括号），入口在 vba-workbench\scripts\agent.py style
 from .style_rules import (check_eol, check_option_explicit, has_option_explicit,
                           run_checks, run_fix, scan_bare, scan_noarg, scope_files, selfcheck)
@@ -109,8 +110,9 @@ __all__ = [
     "NOTE_LEVELS", "Notes", "ModuleSetDiff", "check_module_set",
     "check_doc_modules", "check_export_set", "check_suffix_modules",
     "check_sheet_modules",
-    # vbabin（xlsm 里的 vbaProject.bin：只读模块清单，不要 Excel/密码）
-    "read_vba_bin", "vba_models", "vba_module_names", "compare_vba_modules",
+    # vbabin（xlsm 里的 vbaProject.bin：只读模块清单 + 解压正文，不要 Excel/密码）
+    "read_vba_bin", "vba_models", "vba_module_names", "vba_module_sources",
+    "decompress_vba_stream", "compare_vba_modules",
     "sheet_pages", "vba_documents",
     # style_rules（只动 src 文本：行尾/BOM、无参空括号、裸参数调用括号）
     "scope_files", "check_eol", "check_option_explicit", "has_option_explicit",

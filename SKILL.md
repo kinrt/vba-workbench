@@ -3,7 +3,7 @@ name: vba-workbench
 description: VBA 工程管家（vba-workbench）：在 Windows + 微软 Excel 上操作 .xlsm 里的 VBA 工程——把工程与 src/ 源码双向同步（pull 抓取 / push 写回 / watch 自动写回 / run 运行宏），并做只读代码盘点、风格检查与环境体检。用于提到 VBA 工程、vbaProject.bin、导出/导入模块、源码同步、提交前查格式、删公共模块前查引用、Excel COM/VBE 权限排查的用户任务；纯 VBA 语法问答、Excel 操作教学、WPS/Mac、文件转换不用。
 license: "Source-Available Non-Sale ShareAlike 1.0 (SNSA-1.0)"
 metadata:
-  version: "1.6.13"
+  version: "1.7.0"
   compatibility: Windows 10/11 + 微软 Excel 2010+；Python 3.10+；pywin32。命令按 Windows 路径写，cmd 与 PowerShell 等价执行。
 ---
 

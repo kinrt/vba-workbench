@@ -303,7 +303,7 @@ agent.py
 | `toolkit/check.py`       | 写回前后模块集合、文档模块、工作表模块、后缀模块对账                         | `Notes`、`check_module_set()`、`check_doc_modules()`、`check_sheet_modules()`、`check_suffix_modules()`                             |
 | `toolkit/style_rules.py` | 风格检查与修复；只动 src 文本                                 | `scope_files()`、`run_checks()`、`run_checks_with_details()`、`run_fix()`                                                          |
 | `toolkit/vba_parse.py`   | VBA 源码解析：剥注释 / 字符串、过程声明、成员表、规范化、规则扫描              | `code_lines()`、`declared_procs()`、`parse_members()`、`mask_strings()`、`scan_rules()`                                             |
-| `toolkit/vbabin.py`      | 只读解析 `vbaProject.bin`：模块名、文档模块、工作表、两份对比            | `vba_module_names()`、`vba_documents()`、`sheet_pages()`、`compare_vba_modules()`                                                  |
+| `toolkit/vbabin.py`      | 只读解析 `vbaProject.bin`：模块名、文档模块、工作表、两份对比（模块集合 + 解压后的正文）            | `vba_module_names()`、`vba_documents()`、`sheet_pages()`、`vba_module_sources()`、`compare_vba_modules()`                                                  |
 | `toolkit/watch.py`       | 文件监听三件套                                           | `snap()`、`root_of()`、`changed()`                                                                                                |
 | `toolkit/watchdog.py`    | 线程看门狗、PID 存活探测                                    | `run_with_watchdog()`、`WatchdogTimeout`、`pid_from_hwnd()`、`pid_alive()`                                                         |
 | `toolkit/dialogs.py`     | Excel/VBE 弹窗识别                                    | `classify_window()`、`detect_dialog()`、`detect_target_dialog()`                                                                  |
