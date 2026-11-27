@@ -140,14 +140,14 @@ python vba-workbench\scripts\agent.py style --action check --project 示例表A 
 
 `probe_*.py` 72 个 + `t41.py`，全是一次性脚本，已全部删除；能力归并到上表。
 
-| 类别 | 数量 | 代表脚本 | 现在怎么用 |
-|---|---|---|---|
-| A 项目/环境探测 | 16 | `probe_books`、`probe_state`、`probe_status`、`probe_mods`、`probe_vbp`、`probe_vp`、`probe_pw`、`probe_ver`、`probe_cfg`、`probe_datasrc`、`probe_yunying(2)`、`probe_zu`、`probe_other`、`probe_after_crash`、`probe_after_merge` | `agent.py probe`（四个工作簿汇总，含工程密码保护/模块数/测试工作表行数） |
-| B 表结构/区段 | 9 | `probe_size`、`probe_rowcount`、`probe_range`、`probe_lo`、`probe_headers`、`probe_grid`、`probe_inittable`、`probe_merged`、`probe_cls_region` | `probe` 已覆盖行数/工作表对象；其余是当年的一次性结论，需要时用 `book` + `probe` |
-| C 排序/切片器验证 | 19 | `probe_sort`、`probe_sort2`~`14`、`probe_slicer1`~`5` | 已定论并落进代码（`排序/筛选` 相关），不再需要脚本 |
-| D 界面/对话框/快捷键 | 11 | `probe_dlg`、`probe_faceids`、`probe_findface`、`probe_guard`、`probe_ontime`、`probe_gettl`、`probe_stream`、`probe_decompress`、`probe_cross_origin`、`probe_ref`、`probe_set` | 已定论（FaceID/OnTime/GetTickCount 用法已进 `自定义通用函数`），不再需要脚本 |
-| E 写回/修复/核对 | 16 | `probe_fix1`~`4`、`probe_rebuild1`、`probe_verify2`~`4`、`probe_verify_merge`、`probe_fieldcheck(2)`、`probe_check(2/3)`、`probe_cands`、`t41.py` | `push`（写回）+ `assert`（核对）+ `patch`（改源码） |
-| F 运行断言 | 2 | `probe_run`、`probe_runtest` | `agent.py assert` |
+| 类别（数量） | 代表脚本 | 现在怎么用 |
+|---|---|---|
+| A 项目/环境探测（16） | `probe_books`、`probe_state`、`probe_status`、`probe_mods`、`probe_vbp`、`probe_vp`、`probe_pw`、`probe_ver`、`probe_cfg`、`probe_datasrc`、`probe_yunying(2)`、`probe_zu`、`probe_other`、`probe_after_crash`、`probe_after_merge` | `agent.py probe`（四个工作簿汇总，含工程密码保护/模块数/测试工作表行数） |
+| B 表结构/区段（9） | `probe_size`、`probe_rowcount`、`probe_range`、`probe_lo`、`probe_headers`、`probe_grid`、`probe_inittable`、`probe_merged`、`probe_cls_region` | `probe` 已覆盖行数/工作表对象；其余是当年的一次性结论，需要时用 `book` + `probe` |
+| C 排序/切片器验证（19） | `probe_sort`、`probe_sort2`~`14`、`probe_slicer1`~`5` | 已定论并落进代码（`排序/筛选` 相关），不再需要脚本 |
+| D 界面/对话框/快捷键（11） | `probe_dlg`、`probe_faceids`、`probe_findface`、`probe_guard`、`probe_ontime`、`probe_gettl`、`probe_stream`、`probe_decompress`、`probe_cross_origin`、`probe_ref`、`probe_set` | 已定论（FaceID/OnTime/GetTickCount 用法已进 `自定义通用函数`），不再需要脚本 |
+| E 写回/修复/核对（16） | `probe_fix1`~`4`、`probe_rebuild1`、`probe_verify2`~`4`、`probe_verify_merge`、`probe_fieldcheck(2)`、`probe_check(2/3)`、`probe_cands`、`t41.py` | `push`（写回）+ `assert`（核对）+ `patch`（改源码） |
+| F 运行断言（2） | `probe_run`、`probe_runtest` | `agent.py assert` |
 
 原来手工写在别处的 `t45_edit / t45_test / t45_run / t46_edit / t46_run / probe_books` 也一并归到
 `patch` / `assert` / `probe`，不再存在"每次现写一个 py"。

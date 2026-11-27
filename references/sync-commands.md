@@ -56,21 +56,21 @@ python vba-workbench\scripts\sync.py -i
 用占位壳替换同名旧副本（菜单 8）与提升为公共模块（菜单 9）都**只改 `src/`**，不碰工作簿，不属于这两个方向；
 菜单 5、6、7、11 是**只读**（清单 / 版本 / 体检 / 读 vbaProject.bin 核对模块），不改任何一边。
 
-| 1.5.6 编号（历史对照） | 功能 | 方向 | 用在什么时候 |
-|---|---|---|---|
-| 1 | 抓取源码 | VBE→src | 清单**永远列全部已登记项目**（带 `[已打开]/[可用]/[不可用 原因]` + 路径），**回车 = 抓取全部已打开的工作簿**、填编号 = 抓取那一个（`_pick_projects(extras=True)` 顺带列出“打开但未登记”的工作簿，选中后按文件名抓取并可当场登记）。多个工作簿逐个抓取，单个失败不中断，最后打「成功 X / 失败 Y」 |
-| 2 | 写回源码 | src→VBE | 同一个清单、同一条规则：**回车 = 写回全部已打开的工作簿（多个逐个写）**、填编号 = 只写那一个。写进工作簿时按**全路径**定位并切到前台，绝不写进别的工作簿（默认写回后保存；多个工作簿连续写不再逐个弹确认面板，结尾统一汇总；某个工程受密码保护会当场提示，解除密码保护后按回车继续） |
-| 3 | 批量抓源码 | VBE→src | 多个工作簿·磁盘：工作簿未打开也行 → 脚本自己开一个隐藏 Excel 逐个抓取；同一个清单，**回车 = 全部项目**，填编号 = 只抓取一个 |
-| 4 | 批量写回 | src→VBE | 多个工作簿：公共库改完 → **逐个预检 → 备份 → 写回 → 回读** → 汇总；预检失败的工作簿跳过，不备份、不打开工作簿 |
-| 5 | 查看项目清单 | — | 确认每个工作簿解析到哪个 xlsm、源码目录在哪、公共模块选了哪些 |
-| 6 | 校验公共库版本 | — | 见各工作簿锁定的 `common_version` 与公共库实际版本是否一致 |
-| 7 | 环境体检 | — | pywin32 / AccessVBOM / 项目路径是否正常 |
-| 8 | 对齐公共库 | src→src | 先选一个工作簿 → 列出该项目里与公共库**同名**的真实代码（两边行数/修改时间）→ 逐个 `y/N` 确认是否换成一行的占位壳；换壳前原文备份到 `.backup/<时间戳>-换壳/<项目名>/`。**只改已有文件，不新建任何文件** |
-| 9 | 提升为公共模块 | src→src | 把某个工作簿的模块搬进 `src/common`，并在原位留占位壳 |
-| 10 | 自动写回 | src→VBE | 多个工作簿·常驻：进入后先列**当前打开着的已登记工作簿**，**回车 = 全部监听**、填编号 = 只监听那一个（`watch_open_list`）；监听公共库 + 各项目 `src`，**改哪个模块就只把那个模块**写进它所属的工作簿（`import_folder(only={模块名})`）；公共库模块改动写进所有已打开且用到它的工作簿（各工作簿按自己的 `auto` 子集判断）。**启动先核对一遍**两边（项目 src 全部 + 公共库 `auto` 子集），有一致 / 仅大小写空白 / 内容不同 / 工程里没有四档结论，冲突就列清单让你决定处理规则：以源码为准（写回工作簿）/ 以工作簿内为准（抓回 src）/ 逐个决定 / 先不动。**整工作簿备份只在启动做一次**（`.backup/<时间戳>-自动写回/`，多个工作簿则各备一份），之后每次写回都记日志（`.backup/watch/<项目名>-<时间戳>.log`）。改动要**稳定一个轮询周期**才动手（防编辑器写一半）；源码被删只提示、不删工程里的模块；关闭一个工作簿就不再监听它，全部关闭才停止；**只改内存**（菜单不再问保存，Ctrl+S 才写入文件），命令行默认写回后保存，`--no-save` 才只改内存；`Ctrl+C` 停止并打印「写回 X / 跳过失败 Y / 运行 Z 秒」+ 日志路径 |
-| 11 | 核对模块清单与正文 | 只读 | 读 `xlsm` 里的 `vbaProject.bin`（`toolkit.vbabin`），**不用打开工作簿、不用工程密码**：列出这个工作簿的全部模块名，并自动和 `.backup` 里**最近一份备份**比对模块集合与模块正文，打印「模块 M→N、编译缓存 a→b、消失/新增清单、正文变化模块」。写回 / 抓取之后自查“有没有模块被删、哪个模块代码变了”就按这个。选工作簿走统一选择器，**回车 = 全部项目逐个核对** |
-| 12 | 运行宏 | src→VBE(可选)→运行 | 选一个**已打开**的工作簿 → 输宏名、参数 → 问“先写回源码再运行？” → 调 `Application.Run` → 打印返回值 + **这次新写入的日志尾部**。只运行宏**不需要解除 VBE 密码保护**（要“先写回”才需要）。宏名与模块重名时自动写成 `模块.过程`（否则 VBA 会把它解析成模块、报“该宏在此工作簿中不可用”）。默认只改内存、不保存；`run --isolate --save` 才写入文件；非隔离带 `--save` 会明确提示未生效，journal 记 `save_requested/save_ignored`。`--isolate` 因工作簿已打开失败时 journal 仍记请求模式 `isolate`。隔离预检只放行 `NO_EXCEL` / `TARGET_NOT_OPEN`；目标实例 `COM_CONTEXT`（弹窗 / 受保护视图 / 异权会话）时隔离模式也不启动，hint 给三类成因与下一步，suggested 为可复制的 `run --project … --macro … --isolate --apply`。 |
-| 13 | 清理备份 | 删 `.backup` 旧批 | 先算一遍清单（批次数、体积、按来源分布、将要删哪几批、能释放多少）**只预览不动文件**，再问 `y` 才真删。清理规则与自动清理相同：每类留最近 `backup_keep` 批 + 每天最新 `backup_keep_daily` 份 + 全局最新 `backup_min_keep` 批；`.backup/GBK`、`.backup/watch` 不参与 |
+| 功能（原编号） | 方向 | 用在什么时候 |
+|---|---|---|
+| 抓取源码（1） | VBE→src | 清单**永远列全部已登记项目**（带 `[已打开]/[可用]/[不可用 原因]` + 路径），**回车 = 抓取全部已打开的工作簿**、填编号 = 抓取那一个（`_pick_projects(extras=True)` 顺带列出“打开但未登记”的工作簿，选中后按文件名抓取并可当场登记）。多个工作簿逐个抓取，单个失败不中断，最后打「成功 X / 失败 Y」 |
+| 写回源码（2） | src→VBE | 同一个清单、同一条规则：**回车 = 写回全部已打开的工作簿（多个逐个写）**、填编号 = 只写那一个。写进工作簿时按**全路径**定位并切到前台，绝不写进别的工作簿（默认写回后保存；多个工作簿连续写不再逐个弹确认面板，结尾统一汇总；某个工程受密码保护会当场提示，解除密码保护后按回车继续） |
+| 批量抓源码（3） | VBE→src | 多个工作簿·磁盘：工作簿未打开也行 → 脚本自己开一个隐藏 Excel 逐个抓取；同一个清单，**回车 = 全部项目**，填编号 = 只抓取一个 |
+| 批量写回（4） | src→VBE | 多个工作簿：公共库改完 → **逐个预检 → 备份 → 写回 → 回读** → 汇总；预检失败的工作簿跳过，不备份、不打开工作簿 |
+| 查看项目清单（5） | — | 确认每个工作簿解析到哪个 xlsm、源码目录在哪、公共模块选了哪些 |
+| 校验公共库版本（6） | — | 见各工作簿锁定的 `common_version` 与公共库实际版本是否一致 |
+| 环境体检（7） | — | pywin32 / AccessVBOM / 项目路径是否正常 |
+| 对齐公共库（8） | src→src | 先选一个工作簿 → 列出该项目里与公共库**同名**的真实代码（两边行数/修改时间）→ 逐个 `y/N` 确认是否换成一行的占位壳；换壳前原文备份到 `.backup/<时间戳>-换壳/<项目名>/`。**只改已有文件，不新建任何文件** |
+| 提升为公共模块（9） | src→src | 把某个工作簿的模块搬进 `src/common`，并在原位留占位壳 |
+| 自动写回（10） | src→VBE | 多个工作簿·常驻：进入后先列**当前打开着的已登记工作簿**，**回车 = 全部监听**、填编号 = 只监听那一个（`watch_open_list`）；监听公共库 + 各项目 `src`，**改哪个模块就只把那个模块**写进它所属的工作簿（`import_folder(only={模块名})`）；公共库模块改动写进所有已打开且用到它的工作簿（各工作簿按自己的 `auto` 子集判断）。**启动先核对一遍**两边（项目 src 全部 + 公共库 `auto` 子集），有一致 / 仅大小写空白 / 内容不同 / 工程里没有四档结论，冲突就列清单让你决定处理规则：以源码为准（写回工作簿）/ 以工作簿内为准（抓回 src）/ 逐个决定 / 先不动。**整工作簿备份只在启动做一次**（`.backup/<时间戳>-自动写回/`，多个工作簿则各备一份），之后每次写回都记日志（`.backup/watch/<项目名>-<时间戳>.log`）。改动要**稳定一个轮询周期**才动手（防编辑器写一半）；源码被删只提示、不删工程里的模块；关闭一个工作簿就不再监听它，全部关闭才停止；**只改内存**（菜单不再问保存，Ctrl+S 才写入文件），命令行默认写回后保存，`--no-save` 才只改内存；`Ctrl+C` 停止并打印「写回 X / 跳过失败 Y / 运行 Z 秒」+ 日志路径 |
+| 核对模块清单与正文（11） | 只读 | 读 `xlsm` 里的 `vbaProject.bin`（`toolkit.vbabin`），**不用打开工作簿、不用工程密码**：列出这个工作簿的全部模块名，并自动和 `.backup` 里**最近一份备份**比对模块集合与模块正文，打印「模块 M→N、编译缓存 a→b、消失/新增清单、正文变化模块」。写回 / 抓取之后自查“有没有模块被删、哪个模块代码变了”就按这个。选工作簿走统一选择器，**回车 = 全部项目逐个核对** |
+| 运行宏（12） | src→VBE(可选)→运行 | 选一个**已打开**的工作簿 → 输宏名、参数 → 问“先写回源码再运行？” → 调 `Application.Run` → 打印返回值 + **这次新写入的日志尾部**。只运行宏**不需要解除 VBE 密码保护**（要“先写回”才需要）。宏名与模块重名时自动写成 `模块.过程`（否则 VBA 会把它解析成模块、报“该宏在此工作簿中不可用”）。默认只改内存、不保存；`run --isolate --save` 才写入文件；非隔离带 `--save` 会明确提示未生效，journal 记 `save_requested/save_ignored`。`--isolate` 因工作簿已打开失败时 journal 仍记请求模式 `isolate`。隔离预检只放行 `NO_EXCEL` / `TARGET_NOT_OPEN`；目标实例 `COM_CONTEXT`（弹窗 / 受保护视图 / 异权会话）时隔离模式也不启动，hint 给三类成因与下一步，suggested 为可复制的 `run --project … --macro … --isolate --apply`。 |
+| 清理备份（13） | 删 `.backup` 旧批 | 先算一遍清单（批次数、体积、按来源分布、将要删哪几批、能释放多少）**只预览不动文件**，再问 `y` 才真删。清理规则与自动清理相同：每类留最近 `backup_keep` 批 + 每天最新 `backup_keep_daily` 份 + 全局最新 `backup_min_keep` 批；`.backup/GBK`、`.backup/watch` 不参与 |
 
 **清单标签**：`[已打开]` = 这个工作簿正开在 Excel 里（抓取/写回都不用另开实例，能带未保存改动）；`[可用]` = 文件在、但未打开；`[不可用] 原因` = 配置解析不到文件（路径错/文件搬走）。`[当前打开·未登记]` 只出现在菜单 1 的清单里，表示“已打开但没登记进 `mapping.json`”。标签靠 `watch_open_list` 现读，Excel 读不到时一律退成 `[可用]`，不会误报已打开。菜单 4 里还打开着的工作簿标 `[已打开·要先关]` 并单独警告——那一步会自己打开文件写入并保存，打开着的文件会被占用挡掉。
 
@@ -214,7 +214,7 @@ python vba-workbench\scripts\sync.py clean-backup --keep 3 --apply
 | `list` | `details[]` 每个项目一条：`name / ok / workbook / reason / src / common_modules`；未解析项同时进 `errors[]`（`code=TARGET_NOT_FOUND`、`stage=resolve`），`stats.total/resolved` 汇总 |
 | `plan` | `details=[]`；单条结果在 `stats.results[0]`，字段 `name / intent / ok / workbook / target_reason / open / saved / vbe_state / probe / probe_detail / mode / needs_open / will_save / preserve_unsaved / command / risk`。同名摘要字段（`project/intent/mode/needs_open/will_save/command`）也在 `stats` 顶层。`mode` 取值 `open / disk / isolate / open_required / unavailable / unknown`；目标表缺失时 `errors[0].code=TARGET_NOT_FOUND` |
 | `init` | `details[0]` 是登记项：`name / search_dir / prefix / require_version / src / note`；按文件精确登记时多一个 `file`。`stats.results[0]` 同形，另有 `stats.config / stats.dry / stats.created_src`。目录或文件不存在时 `errors` 非空、退出 2。`--lab` 生成空白表失败：缺脚本报 `MISSING_LAB_TEMPLATE/stage=init`，Excel/COM 失败报 `LAB_TEMPLATE_FAILED/stage=init` |
-| `pull` | `details=[]`；每个项目的结果行在 `stats.results[]`：成功 `name / ok / modules / mode`，失败 `name / ok / reason / mode`。`mode=open|disk` 是该项目实际走的路径；预览标记只在 `stats.dry`，不在结果行 |
+| `pull` | `details=[]`；每个项目的结果行在 `stats.results[]`：成功 `name / ok / modules / mode`，失败 `name / ok / reason / mode`。`mode=open / disk` 是该项目实际走的路径；预览标记只在 `stats.dry`，不在结果行 |
 | `push` | 单张 `details[]`：`name / ok / target / modules`（`--apply` 后带 `mode / saved / backup_path`）；批量 `details[]`：`name / status` |
 | `run` | `details[]`：`name / ok / macro / mode / args / result`（`--isolate` 时带 `mode / saved`）；`stats.cost_sec` 是整条命令耗时，`stats.run_sec` 是 `Application.Run` 本身耗时。journal 的 `mode` 统一为 `preflight / attach / isolate`，非隔离成功也是 `attach`，不再出现 `open`。失败时带 `error`；参数个数不符为 `ARG_MISMATCH` |
 | `doctor` | `details[]` 每项一条：`name / level / detail`，`stats.failed` 是 FAIL 数；带 `--verify-package` 时另出 `stats.package`（`present / checked / missing / mismatch / extra / missing_fields / version_match`），显式校验不通过退出 1 |
