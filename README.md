@@ -98,9 +98,10 @@ flowchart LR
 
 1. **抓取**：把工作簿里的 VBA 模块抓进 `src/`。
 2. **修改**：用 IDE 或 Agent 直接改 `src/` 里的代码，Git 正常 diff。
-3. **预览**：写回前先看模块数、致命错误和影响范围，未确认不会改文件。
-4. **写回**：工具更新 VBA 模块，写前备份，写后回读校验，失败可回滚。
-5. **运行**：写回后运行宏或断言，按日志继续修，形成完整闭环。
+3. **检查**：先做工程引用体检和静态 lint，再用模块差异确认源码与工作簿将有哪些增删改。
+4. **预览**：写回前先看模块数、致命错误和影响范围，未确认不会改文件。
+5. **写回**：工具更新 VBA 模块，写前备份，写后回读校验，失败可回滚。
+6. **运行**：写回后运行宏或断言，按日志继续修，形成完整闭环。
 
 写回只更新 VBA 模块，不改业务数据；只读动作不会修改工作簿。
 
@@ -225,11 +226,11 @@ Agent 的操作规范以 `SKILL.md` 为准；README 只负责介绍项目，不�
 | 抓取 | 工作簿 → `src/` | 抓取源码、抓取未保存改动 |
 | 写回 | `src/` → 工作簿 | 写回源码、常驻写回 |
 | 运行 | 在 Excel 中实际执行 | 运行宏、运行断言 |
-| 检查 | 只读盘点，不改代码 | 成员引用、公共库盘点、结构问题、体检指标 |
+| 检查 | 只读盘点，不改代码 | 成员引用、工程引用体检、静态 lint、模块差异、公共库盘点、结构问题、体检指标 |
 | 修改 | 调整 `src/` 代码和结构 | 格式检查 / 修复、批量补丁、占位壳补 / 清、模块晋升公共库 |
 | 交付 | 备份、导出与验收 | 导出 GBK 副本、整工作簿备份、脱敏扫描、版本核对 |
 
-完整 31 项能力表见 [references/capabilities.md](references/capabilities.md)。
+完整 34 项能力表见 [references/capabilities.md](references/capabilities.md)。
 
 <a id="faq"></a>
 ## 常见问题
@@ -263,7 +264,7 @@ Agent 的操作规范以 `SKILL.md` 为准；README 只负责介绍项目，不�
 | `mapping.json`、换版本、目录命名 | [`references/sync-config.md`](references/sync-config.md) |
 | 修改内部代码、增加命令、查看硬规则 | [`references/sync-maintain.md`](references/sync-maintain.md) |
 | 变更分级、接口约定、数据安全、测试门禁、评审清单 | [`references/change-standards.md`](references/change-standards.md) |
-| VBA 工具整合评估、1.7.x 待审核队列 | [`references/vba-tool-integration.md`](references/vba-tool-integration.md) |
+| VBA 工具整合评估、1.7.x 收敛范围 | [`references/vba-tool-integration.md`](references/vba-tool-integration.md) |
 | 调用链、分层、每个 Python 文件的功能 | [`references/architecture.md`](references/architecture.md) |
 | 审计规则与结构检查 | [`references/audit.md`](references/audit.md) |
 | 公共基础函数与下沉原则 | [`references/toolkit.md`](references/toolkit.md) |

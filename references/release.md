@@ -34,7 +34,7 @@ python vba-workbench\scripts\sync.py scrub --json
 
 ## 3. 打包
 
-一条命令按安装器交付白名单收集 76 件、校验上限并生成 zip；默认只预览，带 `--apply` 才写：
+一条命令按安装器交付白名单收集 82 件、校验上限并生成 zip；默认只预览，带 `--apply` 才写：
 
 ```
 python tests/tools/make_release.py
