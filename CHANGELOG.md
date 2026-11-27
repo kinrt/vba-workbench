@@ -2,7 +2,7 @@
 
 按「对外可见的行为变化」记；每条带日期与提交号（内部重构只在提交信息里写）。
 
-## 1.7.1 — 2026-11-27（已发布 public 快照：引用体检 / 四条 lint / 模块差异 / 文档计数修复）
+## 1.7.1 — 2026-11-27（已发布 public 快照：引用体检 / 四条 lint / 模块差异 / 文档全量核对）
 
 **主题：从 12 项候选里只保留 T-03 引用体检、T-04 四条静态 lint、T-05 模块级差异报告，其余 9 项移出队列。**
 
@@ -11,8 +11,8 @@
 - **T-05 `sync diff`**：新增 `toolkit/vba_diff.py` 与 `features/sync_diff.py`，只读比较源码与工作簿模块，输出 `add/update/remove/same` 与过程级增删改；`remove` 只报告，不删除，`push` 也不自动删。
 - **文档收敛**：`TODO.md` §10 从 12 项改为 3 项；`references/vba-tool-integration.md` 压缩为三项方案；`references/audit.md` / `sync.md` 补章节；`commands.md` 由 manifest 重新生成（35 动词）。
 - **测试**：新增 `test_audit_lint.py` 7 例、`test_audit_references.py` 6 例、`test_sync_diff.py` 4 例；全量 `unittest discover` 626 例通过 / 1 skip / 0 failure（2026-11-27）；真实 `示例表` 已跑 `audit references` 与 `sync diff`，真实 `某业务表` 已跑 `audit lint`（25 条 warning，退出 3）。
-- **文档补齐**：README 能力全景补 `工程引用体检` / `静态 lint` / `模块差异`，能力计数 31→34；`references/capabilities.md` 同步三条；`references/release.md` 交付件数 76→82。
-- **发布物**：`releases/vba-workbench-1.7.1.zip`，82 件 / 396,974 B，SHA256 `4ae8e5bd6fecd5464f012c669182d6443cde85d3cdf815db08889cc935468ef6`；安装副本 82/82 对齐；public 快照已推送 GitHub `main`（86 件，README 能力表 34 项）。
+- **文档补齐**：README 能力全景补 `工程引用体检` / `静态 lint` / `模块差异`，能力计数 31→34；`references/capabilities.md` 同步三条；`references/release.md` 交付件数 76→82；`references/architecture.md` 修正文件计数（61 脚本 / 29 features / 26 toolkit / 45 测试），补 `audit_menu` / `sync_diff` / `audit_lint` / `audit_references` / `vba_diff` / `vba_lint` 六个文件条目。
+- **发布物**：`releases/vba-workbench-1.7.1.zip`，82 件 / 397,273 B，SHA256 `f066611714f793d2a38dcc2899af62a0a03f5565811f80ded1601d3f3e4f461e`；安装副本 82/82 对齐；public 快照已推送 GitHub `main`（86 件，README 能力表 34 项）。
 
 ## 1.7.0 — 2026-11-27（已发布 public 快照：真实环境验证前移）
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from .registry import CommandSpec
 
-# 10 个切片的固定顺序；新增模块只追加，不在入口里写 if verb ==
+# 13 个切片的固定顺序；新增模块只追加，不在入口里写 if verb ==
 FEATURE_MODULES = (
     "features.core",
     "features.sync_read",

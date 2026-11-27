@@ -54,30 +54,30 @@ exit code
 | -------- | --------------------------------------------------------- | -------------------------------------------------------- | ----------- |
 | 入口层      | `scripts/sync.py`、`agent.py`、`audit.py`                   | 三个用户面：同步、Agent、盘点                                        | 是           |
 | 命令登记层    | `toolkit/commands.py`、`registry.py`、`cli.py`、`context.py` | 汇总 SPECS、生成 argparse、建上下文、异常兜底                           | 是           |
-| 业务切片层    | `scripts/features/`                                       | 25 个文件，按命令族拆：core /read/push /transform/run /agent/audit | 是           |
-| 公共基础函数层 | `scripts/toolkit/` | 24 个文件：配置、repo、文件、Excel、宏、检查、风格、VBA 解析、UI、输出 | 是 |
+| 业务切片层    | `scripts/features/`                                       | 29 个文件，按命令族拆：core /read/push /transform/run /agent/audit | 是           |
+| 公共基础函数层 | `scripts/toolkit/` | 26 个文件：配置、repo、文件、Excel、宏、检查、风格、VBA 解析、UI、输出 | 是 |
 | 外部边界层    | `scripts/adapters/`                                       | 2 个文件；Excel COM 网关                                       | 是（COM 相关命令） |
 | 开发 / 验证层 | `tests/`、`tests/tools/`、`scripts/make_lab_workbook.py`    | 单测、基线、门禁、发布、造表                                           | 否           |
 
 ### 2.1 目录和文件数量
 
-* `scripts/`：55 个 `.py`
+* `scripts/`：61 个 `.py`
 
   * 3 个入口脚本
 
-  * 25 个 `features` 文件（含 `__init__.py`）
+  * 29 个 `features` 文件（含 `__init__.py`）
 
-  * 24 个 `toolkit` 文件（含 `__init__.py`）
+  * 26 个 `toolkit` 文件（含 `__init__.py`）
 
   * 2 个 `adapters` 文件
 
   * 1 个开发脚本 `make_lab_workbook.py`
 
-* `tests/`：40 个 `test_*.py`
+* `tests/`：45 个 `test_*.py`
 
-* `tests/tools/`：6 个开发工具
+* `tests/tools/`：7 个开发工具
 
-* `tests/baseline/`：1 个基线记录脚本
+* `tests/baseline/`：9 个文件（1 个记录脚本 + 8 个基线数据 / 文档）
 
 > 读代码时不要从 `tests/` 开始。测试是规格，不是主链。
 
@@ -255,19 +255,20 @@ agent.py
 
 | 文件                    | 作用                                                                      | 主要函数 / 类                                                      |
 | --------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `toolkit/commands.py` | 按固定顺序汇总 10 个切片的 `SPECS`；重复登记直接报错                                        | `load_specs()`、`specs_for(entry)`                             |
+| `toolkit/commands.py` | 按固定顺序汇总 13 个切片的 `SPECS`；重复登记直接报错                                        | `load_specs()`、`specs_for(entry)`                             |
 | `toolkit/registry.py` | 定义 `CommandSpec` / `ArgSpec` / `ProjectMode`；生成 argparse；按字符串加载 handler | `build_parser()`、`load_handler()`、`dispatch()`                |
 | `toolkit/cli.py`      | 三入口共用骨架：`--version`、`--no-input`、`-i` 把关、异常翻译                           | `run_dispatch()`、`run_cli()`、`entry()`、`ensure_interactive()` |
 | `toolkit/context.py`  | 运行上下文：配置、根路径、JSON 模式、阶段计时                                               | `AppContext.build()`、`Progress.stage()`、`stage_timings()`     |
 | `toolkit/render.py`   | 唯一输出出口：Outcome → JSON 信封或可读文本                                             | `render()`                                                    |
 
-### 5.3 `features` 业务切片（25 个）
+### 5.3 `features` 业务切片（29 个）
 
 | 文件                             | 作用                                            | 主要函数                                                                                                        |
 | ------------------------------ | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `features/__init__.py`         | 包标记；按命令族分切片                                   | —                                                                                                           |
 | `features/core.py`             | 只读基础命令：版本、项目清单、体检、脱敏扫描                        | `version()`、`list_projects()`、`doctor()`、`scrub()`                                                          |
 | `features/sync_read.py`        | VBE → src；模块清单、模式推荐、抓取                        | `vbamod()`、`plan()`、`pull()`、`pull_open()`、`_export_workbook()`                                             |
+| `features/sync_diff.py`        | `sync.py diff`：只读比较源码与 VBE 模块，报 `add/update/remove/same` 和过程级差异 | `diff()`                                                                                                    |
 | `features/sync_push.py`        | src → VBE；初始化、写回、占位壳入口                        | `push()`、`_push_single()`、`_push_projects()`、`_writeback()`、`_attach_or_open()`                             |
 | `features/sync_init.py`        | `init` 动词：生成 mapping.json 和 src 骨架            | `init()`                                                                                                    |
 | `features/sync_preflight.py`   | 写回前源码预检；只读、不碰 Excel                           | `_source_preflight()`、`_preflight_or_fail()`、`_missing_class_header()`、`_long_continuation()`               |
@@ -284,6 +285,9 @@ agent.py
 | `features/agent_patch.py`      | 补丁、断言、风格、指标四个动词                               | `handle_patch()`、`handle_assert()`、`handle_style()`、`handle_metrics()`                                      |
 | `features/audit_a.py`          | 成员引用 / 公共库 / 项目依赖三个视角                         | `handle_members()`、`handle_common()`、`handle_project()`、`build_*_lines()`、`write_*_md()`                    |
 | `features/audit_b.py`          | 结构 / 指标 / 总览三个视角                              | `structure()`、`indicators()`、`overview()`、`_probe_live()`                                                   |
+| `features/audit_menu.py`       | `audit -i` 交互菜单：范围 / 分类 / 模块选择，六视角与 Markdown 导出 | `interactive_entry()`、`run_menu()`                                                                          |
+| `features/audit_lint.py`       | `audit lint`：项目枚举、四条静态规则出口                       | `lint()`                                                                                                    |
+| `features/audit_references.py` | `audit references`：只读引用体检，状态判定与轻量 `used_by`        | `references()`                                                                                              |
 | `features/audit_engine.py`     | audit 共用规则引擎门面；组合三个 mixin                     | `AuditEngine`、`common_analyses()`、`summary()`、`overview_actions()`                                          |
 | `features/audit_scan.py`       | 源码范围枚举、缓存、成员可达性扫描                             | `ScanMixin`：`common_files()`、`project_files()`、`analyze_target()`、`dep_rows()`                              |
 | `features/audit_structure.py`  | 结构问题分组对账                                      | `StructureMixin`：`structure_issues()`、`structure_rows()`、`binding_issues()`、`regression_issues()`           |
@@ -291,7 +295,7 @@ agent.py
 | `features/audit_rules.py`      | 阈值、白名单、正则、纯辅助函数；规则唯一来源                        | `_names_in_list()`、`_ignore_set()`、`_jsonable()`                                                            |
 | `features/release.py`          | 发布 / 文档切片的占位；当前 `SPECS = ()`，无运行时命令           | —                                                                                                           |
 
-### 5.4 `toolkit` 公共基础函数（24 个）
+### 5.4 `toolkit` 公共基础函数（26 个）
 
 | 文件                       | 作用                                                | 主要函数 / 类                                                                                                                        |
 | ------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -306,6 +310,8 @@ agent.py
 | `toolkit/check.py`       | 写回前后模块集合、文档模块、工作表模块、后缀模块对账                         | `Notes`、`check_module_set()`、`check_doc_modules()`、`check_sheet_modules()`、`check_suffix_modules()`                             |
 | `toolkit/style_rules.py` | 风格检查与修复；只动 src 文本                                 | `scope_files()`、`run_checks()`、`run_checks_with_details()`、`run_fix()`                                                          |
 | `toolkit/vba_parse.py`   | VBA 源码解析：剥注释 / 字符串、过程声明、成员表、规范化、规则扫描              | `code_lines()`、`declared_procs()`、`parse_members()`、`mask_strings()`、`scan_rules()`                                             |
+| `toolkit/vba_diff.py`    | 模块 / 过程级差异纯函数；不碰 Excel                              | `parse_procedures()`、`compare_module()`、`compare_modules()`                                                                 |
+| `toolkit/vba_lint.py`    | 四条静态 lint 纯文本规则；过程跨度、声明、返回值、限定调用                 | `lint_text()`、`parse_proc_spans()`                                                                                          |
 | `toolkit/vbabin.py`      | 只读解析 `vbaProject.bin`：模块名、文档模块、工作表、两份对比（模块集合 + 解压后的正文）            | `vba_module_names()`、`vba_documents()`、`sheet_pages()`、`vba_module_sources()`、`compare_vba_modules()`                                                  |
 | `toolkit/watch.py`       | 文件监听三件套                                           | `snap()`、`root_of()`、`changed()`                                                                                                |
 | `toolkit/watchdog.py`    | 线程看门狗、PID 存活探测                                    | `run_with_watchdog()`、`WatchdogTimeout`、`pid_from_hwnd()`、`pid_alive()`                                                         |
@@ -380,7 +386,7 @@ agent.py
 不是所有文件都需要读。运行时主链其实只有：
 
 ```
-3 个入口 + 9 个命令切片的主文件 + 8 个 toolkit 基础函数
+3 个入口 + 12 个命令切片的主文件 + 8 个 toolkit 基础函数
 ```
 
 其余大量文件是：
@@ -421,7 +427,7 @@ agent.py
 
 ## 9. 测试与开发工具地图
 
-测试不是运行时，但它是 “行为规格”。40 个测试文件按被测对象分组：
+测试不是运行时，但它是 “行为规格”。45 个测试文件按被测对象分组：
 
 | 组                | 文件                                                                                                                                                                                                              |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -507,4 +513,4 @@ agent.py
 入口壳 → manifest → dispatch → feature handler → toolkit 基础函数 → Outcome → render
 ```
 
-先掌握这条链，再按命令族查 `features`，最后才下钻 `toolkit` 和 audit mixin。这样 55 个运行时文件不需要一次读完。
+先掌握这条链，再按命令族查 `features`，最后才下钻 `toolkit` 和 audit mixin。这样 61 个脚本文件不需要一次读完。
