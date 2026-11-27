@@ -68,6 +68,8 @@ python vba-workbench\scripts\agent.py metrics [--out 报告.md] [--apply]       
 | 无参空括号 | `call` | 无参调用保持 `Call Foo`，不许 `Call Foo()` | 去掉空括号 |
 | 裸参数 | `call` | 带参调用一律 `Call Foo(a, b)`，不许裸参数 | 补 `Call` + 括号 |
 
+**标识符大小写不在自动检查范围，属写码约定**：VBE 对工程内已存在的同名标识符一律沿用其既有形态，只对新名字套标准（内置取类型库标准、自定义跟随声明）。因此改源码时要照抄表／`pull` 结果里的现成写法，不要批量改成“标准大写”再 push（会被 VBE 反向纠正）。`.frx` 二进制每次导出都不同，文本零差异即视为一致。规则原文见 `SKILL.md` §2.2 第 7 条，机制与实测见 `pitfalls.md` §17、§18。
+
 裸参数修复的细节约定：
 
 - `MsgBox "a", 1` / `Run "x"` / `obj.M a` / 行内 `If x Then Foo a` → 全部转 `Call ...(参数)`

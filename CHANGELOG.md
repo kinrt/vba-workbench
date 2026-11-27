@@ -13,6 +13,7 @@
   - 已录：状态 4（closed / open-clean / open-dirty / readonly）、文件副作用 3（pull / push / gbk-export）、宏 2（isolate / assert）、弹窗 3（Excel MsgBox / 跨进程 PID / TARGET_NOT_ACTIVE）。
   - not_run：`OPEN_PROTECTED`（工程密码只能 VBE 手工设）、`OPEN_BUSY`（由 Excel MsgBox 覆盖）、`COM_CONTEXT`（不破坏本机会话强造）、`VBE_COMPILE_ERROR`（自动化路径实际 `RUN_FAILED`）、通用 VBE 模态（需 GUI 手工构造）。
 - **`assert` 前台弹窗预检**：`_ensure_active` 在切目标簿前先按 PID 探测模态框；同进程有 MsgBox/InputBox 挡住时直接报 `TARGET_NOT_ACTIVE / stage=attach`，不再空转 5 次后误跑成功；编译错误框单独报 `VBE_COMPILE_ERROR / stage=vbe`。
+- **标识符大小写与 `.frx` 噪音口径**：更正为“VBE 遇到工程内已有标识符时沿用既有形态”，新增 `references/pitfalls.md` §17（大小写漂移）与 §18（`.frx` 每次导出字节不同属已知噪音）；改源码时先照抄表内已有写法，不能靠批量改大写再 `push` 纠正（提交 `3fd2075`）。
 - **版本口径**：`VERSION` 1.7.0；`SKILL.md` metadata 同步；`tests/baseline/1.5.6/coverage.json` 只回填 golden 状态与复跑命令，不向旧基线塞原始文件。
 - **测试**：全量 `unittest discover` 609 例通过 / 1 skip / 0 failure（2026-11-27）。
 
