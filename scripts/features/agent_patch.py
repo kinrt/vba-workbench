@@ -393,7 +393,7 @@ def _dialog_snippet(text: str, limit: int = 160) -> str:
 def _classify_watchdog_timeout(xl, *, timeout: float) -> Failure:
     """超时后的二次分类：实例退出优先，其次编译错误框，其余模态框点名弹窗，判不出回退通用超时。
 
-    优先级（backlog-1.7 B4/B2 口径）：
+    优先级（B4/B2 口径）：
       1. PID 已退出 → ``EXCEL_CLOSED``（``stage=assert``），优先于超时码；
       2. 编译错误弹窗 → ``VBE_COMPILE_ERROR``（``stage=vbe``）；
       3. 通用 VBE / Excel 模态框 → ``WATCHDOG_TIMEOUT``（``stage=assert``），hint 点名标题与正文；

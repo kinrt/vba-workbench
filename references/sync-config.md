@@ -140,7 +140,6 @@ python vba-workbench\scripts\sync.py init --project 示例表A --dir "D:\表格\
 ├─ mapping.json              本机配置（真实路径，不入公开包；路径基准 = 本目录）
 ├─ vba-workbench/                可独立分发的 skill 包（不含真实配置与 src）
 │  ├─ SKILL.md               skill 入口（能力 / 触发条件 / 命令速查 / 安全边界）
-│  ├─ EVAL.md                 评测报告
 │  ├─ assets/
 │  │  └─ mapping.example.json 配置占位样例（对外交付用，不含真实路径）
 │  ├─ requirements.txt / VERSION / CHANGELOG.md / LICENSE
@@ -155,9 +154,7 @@ python vba-workbench\scripts\sync.py init --project 示例表A --dir "D:\表格\
 │  │                         files（write_source=UTF-8+LF、边界转码、备份、移动）、
 │  │                         check / style_rules / excel / watch / app_guard / vbabin /
 │  │                         ui（run_menu/pick_list/pick_grouped）、cli（-i/退出码）
-│  ├─ references/            说明书：sync 四册 + audit.md / agent.md / toolkit.md / usage-examples.md / release.md
-│  ├─ evals/                 触发与行为用例（evals.json / trigger-evals.json / README.md）
-│  └─ tests/                 纯函数自测（unittest，不需要 Excel）
+│  └─ references/            说明书：sync 四册 + audit.md / agent.md / toolkit.md / usage-examples.md / release.md
 ├─ src/
 │  ├─ common/                公共库（所有工作簿共享）
 │  │  ├─ 模块/               .bas
@@ -177,6 +174,8 @@ python vba-workbench\scripts\sync.py init --project 示例表A --dir "D:\表格\
 ```
 
 分类目录名与 VBE 工程资源管理器一致：`Microsoft Excel 对象` / `窗体` / `模块` / `类模块`。脚本也兼容"全部平铺在项目根"的旧布局（`iter_source_files` 用 `rglob`）。
+
+> `EVAL.md`、`evals/`、`tests/` 只存在于完整 `main` 开发仓库，不随安装包或公开快照；安装包只含 82 个交付文件。
 
 ### 2.1 文档模块的文件名带工作表名
 

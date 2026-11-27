@@ -58,7 +58,7 @@
 
 > **1.6 收口规则**：缺宏 / 禁用宏 / 业务报错统一报 `RUN_FAILED`（`stage=run`/`assert`），旧细分码
 > `MACRO_NOT_AVAILABLE` / `MACRO_DISABLED` 已从错误码枚举撤销，缺宏与禁用宏的区分信息只出现在 `hint` 文案；
-> 不恢复独立分流码（B3 复核维持已接受设计差异，见 `backlog-1.7.md`）。
+> 不恢复独立分流码（B3 复核维持已接受设计差异）。
 > **自动化会话的差异**：`run --isolate` / COM 起的实例 `AutomationSecurity=Low`，宏会被放行，与信任中心无关。
 
 ## 6. `TARGET_OPEN` 隔离模式撞已打开工作簿

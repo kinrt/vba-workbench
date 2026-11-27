@@ -1,7 +1,7 @@
 # vba-workbench 架构与文件地图
 
 > 本文是 README 的深入附录：讲调用链、分层和每个 Python 文件的功能。
-> 日常用法和第一次上手都看 [../README.md](../README.md)；agent 的操作入口看 [../SKILL.md](../SKILL.md)。
+> 日常用法和第一次上手见仓库根 `README.md`（不随安装包交付）；agent 的操作入口看 [../SKILL.md](../SKILL.md)。
 
 ---
 
@@ -83,7 +83,7 @@ exit code
 
 ***
 
-## 3. 命令面：32 个动词
+## 3. 命令面：35 个动词
 
 ### 3.1 按切片分组
 
@@ -91,6 +91,7 @@ exit code
 | ------------------------- | --------------------------------------------------- | ------------------------------- |
 | `features.core`           | `version` / `list` / `doctor` / `scrub`             | 版本核对、项目解析、环境体检、交付件脱敏扫描；不碰 Excel |
 | `features.sync_read`      | `vbamod` / `plan` / `pull` / `pull-open`            | 模块清单核对、模式推荐、VBE → src 抓取        |
+| `features.sync_diff`      | `diff`                                              | 只读比较源码与工程模块，过程级差异报告             |
 | `features.sync_push`      | `init` / `push` / `shells`                          | 初始化配置、src → VBE 写回、公共库占位壳       |
 | `features.sync_transform` | `align` / `promote` / `gbk-export` / `clean-backup` | 公共库换壳、模块提升、GBK 副本、备份清理          |
 | `features.run`            | `run` / `watch`                                     | 宏运行编排、常驻监听                      |
@@ -98,13 +99,15 @@ exit code
 | `features.agent_patch`    | `assert` / `patch` / `metrics` / `style`            | 断言、补丁、源码体检、风格检查 / 修复            |
 | `features.audit_a`        | `members` / `common` / `project`                    | 成员引用、公共库总览、项目依赖矩阵               |
 | `features.audit_b`        | `structure` / `indicators` / `overview`             | 结构问题、H01–H19 指标、全仓总览            |
+| `features.audit_lint`     | `lint`                                              | 四条高置信静态规则；规则实现在 `toolkit.vba_lint` |
+| `features.audit_references` | `references`                                      | 只读引用体检；COM 读取在 `excel_gateway.read_project_references` |
 
 ### 3.2 入口与切片的关系
 
 ```
-sync.py  → sync.*   → core / sync_read / sync_push / sync_transform / run
+sync.py  → sync.*   → core / sync_read / sync_diff / sync_push / sync_transform / run
 agent.py → agent.*  → agent_io / agent_patch
-audit.py → audit.*  → audit_a / audit_b → AuditEngine
+audit.py → audit.*  → audit_a / audit_b / audit_lint / audit_references → AuditEngine
 ```
 
 三个入口**互不 import**。如果某个能力三个入口都要用，应下沉到 `toolkit`，而不是让入口互相调用。

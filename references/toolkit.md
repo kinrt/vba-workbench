@@ -48,9 +48,9 @@ vba-workbench/
 │     ├─ vbabin.py       # 只读解析 vbaProject.bin
 │     └─ cli.py          # -i 开关、退出码、异常兜底
 ├─ references/           # sync 四册 + audit.md、agent.md、toolkit.md、usage-examples.md
-├─ evals/                # evals.json、trigger-evals.json
-├─ tests/                # 单测 + MANUAL.md
 ```
+
+单测与内部评测只在完整 `main` 的 `tests/` 与 `evals/`，不随安装包或公开快照。
 
 运行期 `src/`（源码真源）与 `mapping.json` 在工作仓库根目录，不在本包内；包只带 `assets/mapping.example.json` 样例。
 

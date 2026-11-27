@@ -108,6 +108,11 @@ class AppGuard:
                 if cur != target:
                     setattr(self.app, attr, target)
                     changed[attr] = (cur, target)
+                    back = getattr(self.app, attr)
+                    if back != target:
+                        # 赋值被 Excel 静默忽略（弹窗占用 / 工程重载中 / 受保护视图）：
+                        # 不能当成"已还原"，记入 errors 交给调用方出告警
+                        self._report_restore_failed(attr, back)
             except Exception as e:
                 self.errors.append(f"还原 {attr} 失败：{e}")
 

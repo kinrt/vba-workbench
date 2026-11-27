@@ -3,7 +3,7 @@ name: vba-workbench
 description: VBA 工程管家（vba-workbench）：在 Windows + 微软 Excel 上操作 .xlsm 里的 VBA 工程——把工程与 src/ 源码双向同步（pull 抓取 / push 写回 / watch 自动写回 / run 运行宏），并做只读代码盘点、风格检查与环境体检。用于提到 VBA 工程、vbaProject.bin、导出/导入模块、源码同步、提交前查格式、删公共模块前查引用、Excel COM/VBE 权限排查的用户任务；纯 VBA 语法问答、Excel 操作教学、WPS/Mac、文件转换不用。
 license: "Source-Available Non-Sale ShareAlike 1.0 (SNSA-1.0)"
 metadata:
-  version: "1.7.0"
+  version: "1.7.1"
   compatibility: Windows 10/11 + 微软 Excel 2010+；Python 3.10+；pywin32。命令按 Windows 路径写，cmd 与 PowerShell 等价执行。
 ---
 
@@ -107,21 +107,22 @@ metadata:
 
 ## 四、工具与资料
 
-- `scripts/sync.py`：17 个动词（init / list / doctor / scrub / version / vbamod / plan / pull / pull-open / push / run / watch / shells / align / promote / gbk-export / clean-backup）。
-- `scripts/audit.py`：只读 6 视角（members / common / project / structure / indicators / overview），同一信封。
+- `scripts/sync.py`：18 个动词（init / list / doctor / scrub / version / vbamod / plan / pull / pull-open / push / run / watch / shells / align / promote / gbk-export / clean-backup / diff）。
+- `scripts/audit.py`：只读 8 视角（members / common / project / structure / indicators / overview / lint / references），同一信封。
 - `scripts/agent.py`：probe / book / backup / patch / assert / push / style / logs / metrics；写类动词也要 `--apply`。
 - `scripts/toolkit/`：公共基础函数；业务编排在 `scripts/features/`。三个入口只做参数解析、上下文组装与渲染，入口之间不互相 import；`features` 之间也不互相 import。
-- `src/`：源码唯一真源（`src/common` + `src/projects/<项目>`）；`assets/`：配置模板；`evals/`：触发与行为用例。
-- 资料按需读：`references/commands.md`（32 动词完整命令表，manifest 生成）、`references/sync.md`（总览）、`references/sync-commands.md`（动词/JSON 字段）、`references/sync-config.md`（mapping）、`references/sync-maintain.md`（改内部逻辑）、`references/audit.md`（判定规则）、`references/toolkit.md`（公共基础函数）、`references/agent.md`、`references/pitfalls.md`（常见问题与处理）、`references/release.md`；1.7 待办与已关闭项见 `references/backlog-1.7.md`。日常调用只需本页。
+- `src/`：源码唯一真源（`src/common` + `src/projects/<项目>`）；`assets/`：配置模板。
+- 资料按需读：`references/commands.md`（35 动词完整命令表，manifest 生成）、`references/sync.md`（总览）、`references/sync-commands.md`（动词/JSON 字段）、`references/sync-config.md`（mapping）、`references/sync-maintain.md`（改内部逻辑）、`references/audit.md`（判定规则）、`references/toolkit.md`（公共基础函数）、`references/agent.md`、`references/pitfalls.md`（常见问题与处理）、`references/release.md`；**改任何脚本/规则/文档前先读 `references/change-standards.md`**（变更分级、接口/数据安全/VBA 语义/测试门禁/评审清单）；1.7.x 能力整合范围见 `references/vba-tool-integration.md`。日常调用只需本页。
 
 ## 五、给 agent 的约定
 
+- **改 Skill 先过标准**：改脚本、规则、命令或交付流程前，先读 `references/change-standards.md`；仓库根 `TODO.md` §10（不随安装包交付）未批准的项不改代码，不先做“顺手优化”。
 - **先判断工作簿状态再执行**：不确定就 `sync.py plan --project X --intent ... --json`；不要先让用户打开工作簿，也不要 `Start-Process`。
 - **先预览再执行**：不带 `--apply` 看 `details`；`plan` / `pull` / `pull-open` / `vbamod` 的结果行在 `stats.results`，不要只看 `details`。确认后加 `--apply`；预览不碰 Excel、不修改文件。
 - **非交互**：`--no-input` 关闭所有提问；缺参数直接失败。
 - **串行**：同一 Excel 实例不要并行两支写回；`watch` 与 `push` 不要同时写同一个工作簿。
 - **硬性限制**：agent/CI 不运行 `watch`（无限循环；必须运行就加 `--seconds N`）；不操作未登记工作簿；不改业务数据；工程有密码保护时先解除保护，不要重试。
-- **退出码**：0 成功；1 业务失败（看 `errors[0].code` / `stage`）；2 用法错；3 只读体检仅有警告（`structure` / `indicators` 加 `--strict` 升为 1；`common` 无公共库也退 3，但不接受 `--strict`）；`overview` 默认只对 `sheet_mismatch/binding_target/dup/shadow` 退 1，规则提醒只计数，`--strict` 才按 1；130 用户中断。
+- **退出码**：0 成功；1 业务失败（看 `errors[0].code` / `stage`）；2 用法错；3 只读体检仅有警告（`structure` / `indicators` / `lint` / `references` 加 `--strict` 升为 1；`common` 无公共库也退 3，但不接受 `--strict`）；`overview` 默认只对 `sheet_mismatch/binding_target/dup/shadow` 退 1，规则提醒只计数，`--strict` 才按 1；130 用户中断。
 - **幂等**：`pull` / `push` 可重复；`push` 每次先备份。
 - **错误分流**：先看 `errors[0].code` 与 `stage`，不要凭报错文本猜。完整码表只维护在 `references/usage-examples.md`（`errors[0].code` 段），逐码现象、原因、处理与禁止事项见 `references/pitfalls.md`。高频处置：`TARGET_NOT_FOUND` 查 `search_dir/prefix`；`EXCEL_CLOSED` 重开工作簿；`EXCEL_BUSY` 先关闭弹窗或等待计算；`NO_EXCEL/TARGET_NOT_OPEN` 走该动词给出的出口；`COM_CONTEXT` 查权限/会话；`CONFIG_NOT_FOUND` 按报出的完整路径建 `mapping.json`；`SOURCE_PREFLIGHT` 先修源码（不打开工作簿、不备份）；`ARG_MISMATCH` 核对 `--arg` 个数/顺序；缺宏 / 禁用宏 / 业务报错 1.6 统一归 `RUN_FAILED`，宏卡住 / 弹窗阻塞归 `WATCHDOG_TIMEOUT`；旧细分码已撤销，区分信息只看 `hint`（宏名/编译问题 vs 信任位置）。
 

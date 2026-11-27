@@ -14,7 +14,7 @@ python tests/tools/gen_commands_md.py
 - `--project` / `--all-project`：项目选择，取值见各行；
 - `--json`：输出一行 JSON 信封；标注「否」的动词显式拒绝该开关。
 
-已登记动词合计：32 个。
+已登记动词合计：35 个。
 
 ### sync.py（sync）
 
@@ -22,6 +22,7 @@ python tests/tools/gen_commands_md.py
 |---|---|---|---|---|---|---|
 | `align`<br>把项目里与公共库同名的旧真身换成占位壳 | `--project` 可选 | 默认预览，--apply 才写入文件 | 0/1/2 | 是 | transform.align.success, transform.align.not_found, transform.align.usage, transform.align.json | references/sync-commands.md#align |
 | `clean-backup`<br>清理 .backup 旧批次（默认只预览） | `--keep`（整数）；`--keep-tag`（可重复） | 默认预览，--apply 才写入文件 | 0/1/2 | 是 | transform.clean_backup.success, transform.clean_backup.bad_config, transform.clean_backup.usage, transform.clean_backup.json | references/sync-commands.md#clean-backup |
+| `diff`<br>只读比较源码与工程模块（新增/修改/仅工程/一致） | `--all`；`--md`（路径）；`--out`（路径）；`--project` 必填 | 只读 | 0/1/2 | 是 | tests/test_sync_diff.py | references/sync.md#diff |
 | `doctor`<br>环境体检（不合格退出 1） | `--verify-package` | 只读 | 0/1/2 | 是 | contract.doctor.success, contract.doctor.failed, contract.doctor.verify-package | references/sync-commands.md#doctor |
 | `gbk-export`<br>导出 src 的 GBK 副本到 .backup/GBK（不改 src） | `--project`/`--all-project` 二选一 | 默认预览，--apply 才写入文件 | 0/1/2 | 是 | transform.gbk_export.success, transform.gbk_export.not_found, transform.gbk_export.usage, transform.gbk_export.json | references/sync-commands.md#gbk-export |
 | `init`<br>生成/更新 mapping.json 与 src 骨架（默认只预览） | `--dir`；`--file`（路径）；`--prefix`；`--src`；`--config`；`--allow-outside`；`--lab`；`--project` 必填 | 默认预览，--apply 才写入文件 | 0/1/2 | 是 | contract.init.preview, contract.init.apply | references/sync-commands.md#init |
@@ -44,9 +45,11 @@ python tests/tools/gen_commands_md.py
 |---|---|---|---|---|---|---|
 | `common`<br>公共库全部模块的引用数/体积/建议 | `--project`（可重复）；`--exclude`（可重复）；`--all`；`--md`（路径）；`--out`（路径） | 只读 | 0/1/2/3 | 是 | audit_a.common.success, audit_a.common.not_configured_exit3, audit_a.common.usage, audit_a.common.json_pure | references/audit.md#common |
 | `indicators`<br>体检指标 H01–H19 复跑 | `--exclude`（可重复）；`--ignore`（可重复）；`--strict`；`--all`；`--md`；`--out` | 只读 | 0/1/2/3 | 是 | tests/test_audit_b.py | references/audit.md |
+| `lint`<br>四条高置信静态 lint（只读，默认 warning 退出 3） | `--exclude`（可重复）；`--strict`；`--all`；`--md`（路径）；`--out`（路径）；`--project` 必填 | 只读 | 0/1/2/3 | 是 | tests/test_audit_lint.py | references/audit.md#lint |
 | `members`<br>某模块被谁调用（默认展开 public 之外的成员） | `--module`；`--exclude`（可重复）；`--all`；`--md`（路径）；`--out`（路径） | 只读 | 0/1/2 | 是 | audit_a.members.success, audit_a.members.not_found, audit_a.members.usage, audit_a.members.json_pure | references/audit.md#members |
 | `overview`<br>公共库 + 结构的汇总意见 | `--project`（可重复）；`--exclude`（可重复）；`--ignore`（可重复）；`--strict`；`--all`；`--md`；`--out` | 只读 | 0/1/2/3 | 是 | tests/test_audit_b.py | references/audit.md |
 | `project`<br>某个工作簿的依赖矩阵 | `--exclude`（可重复）；`--all`；`--md`（路径）；`--out`（路径）；`--project` 必填 | 只读 | 0/1/2 | 是 | audit_a.project.success, audit_a.project.not_found, audit_a.project.usage, audit_a.project.json_pure | references/audit.md#project |
+| `references`<br>只读检查 VBA 工程引用（缺失/损坏/路径；默认警告退出 3） | `--strict`；`--md`（路径）；`--out`（路径）；`--project` 必填 | 只读 | 0/1/2/3 | 是 | tests/test_audit_references.py | references/audit.md#references |
 | `structure`<br>旧副本 / 孤儿壳 / 缺壳 / 重名过程 / 文档模块对账 / 旧规则回退 | `--exclude`（可重复）；`--ignore`（可重复）；`--strict`；`--all`；`--md`；`--out` | 只读 | 0/1/2/3 | 是 | tests/test_audit_b.py | references/audit.md |
 
 ### agent.py（agent）

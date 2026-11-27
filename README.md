@@ -2,7 +2,7 @@
 
 > 把锁在 `.xlsm` 里的 VBA 同步成可 diff 的 `src/`：Git 记录版本，AI / IDE 改代码，工具安全写回并运行断言。
 
-**Windows + 微软 Excel** · **Python 3.10+** · **v1.7.0** · **SNSA-1.0**
+**Windows + 微软 Excel** · **Python 3.10+** · **v1.7.1** · **SNSA-1.0**
 
 [3 分钟上手](#quickstart) · [核心工作流](#workflow) · [日常菜单](#menu) · [交给 Agent](#agent) · [文档导航](#docs)
 
@@ -262,6 +262,8 @@ Agent 的操作规范以 `SKILL.md` 为准；README 只负责介绍项目，不�
 | 同步原理与数据流 | [`references/sync.md`](references/sync.md) |
 | `mapping.json`、换版本、目录命名 | [`references/sync-config.md`](references/sync-config.md) |
 | 修改内部代码、增加命令、查看硬规则 | [`references/sync-maintain.md`](references/sync-maintain.md) |
+| 变更分级、接口约定、数据安全、测试门禁、评审清单 | [`references/change-standards.md`](references/change-standards.md) |
+| VBA 工具整合评估、1.7.x 待审核队列 | [`references/vba-tool-integration.md`](references/vba-tool-integration.md) |
 | 调用链、分层、每个 Python 文件的功能 | [`references/architecture.md`](references/architecture.md) |
 | 审计规则与结构检查 | [`references/audit.md`](references/audit.md) |
 | 公共基础函数与下沉原则 | [`references/toolkit.md`](references/toolkit.md) |

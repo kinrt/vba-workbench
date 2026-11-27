@@ -10,11 +10,14 @@ FEATURE_MODULES = (
     "features.sync_read",
     "features.sync_push",
     "features.sync_transform",
+    "features.sync_diff",
     "features.run",
     "features.agent_io",
     "features.agent_patch",
     "features.audit_a",
     "features.audit_b",
+    "features.audit_lint",
+    "features.audit_references",
     "features.release",
 )
 

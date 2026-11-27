@@ -2,6 +2,7 @@
 
 > 版本：1.6.2（1.6 分层架构）；**本册为 1.6 重写**。
 > 旧版基于单体 `sync.py` 的函数地图（`cmd_*` / `MENU_ITEMS` / `_dispatch` / `align_with_common` / `sync_into` 等）已随分层重构失效，不再保留；仍成立的运维知识收敛在 §6 硬规则与 §8 取舍。前置概念见 `SKILL.md`，抓取/写回原理见 `sync.md`，公共基础函数边界见 `toolkit.md`。
+> 通用变更流程、接口/数据安全/测试门禁/评审清单见 [`change-standards.md`](change-standards.md)；本册 §6 是技术硬规则，不替代变更审批。
 
 ## 目录
 

@@ -62,5 +62,41 @@ def read_vbproject_probe(wb):
     return snap
 
 
+def _safe_attr(obj, name: str, default=None):
+    """读 COM 属性：单个属性失败不拖垮整张引用清单。"""
+    try:
+        return getattr(obj, name)
+    except Exception:
+        return default
+
+
+def read_project_references(wb):
+    """只读返回 VBA 工程引用清单（名称/GUID/路径/版本/是否损坏）。
+
+    与 ``read_vbproject_probe`` 分开：那个只给 H16/H17 汇总引用名；这里保留
+    排障需要的详细字段，供 ``audit references`` 使用。工程读不到时 ``error``
+    填原始异常文本，调用方决定是否降级成“不可读”警告。
+    """
+    snap: dict[str, Any] = {"references": [], "error": None}
+    try:
+        vbp = wb.VBProject
+        for ref in list(vbp.References):
+            full_path = str(_safe_attr(ref, "FullPath", "") or "")
+            snap["references"].append({
+                "name": str(_safe_attr(ref, "Name", "") or ""),
+                "description": str(_safe_attr(ref, "Description", "") or ""),
+                "guid": str(_safe_attr(ref, "GUID", "") or ""),
+                "major": _safe_attr(ref, "Major", None),
+                "minor": _safe_attr(ref, "Minor", None),
+                "full_path": full_path,
+                "built_in": bool(_safe_attr(ref, "BuiltIn", False)),
+                "broken": bool(_safe_attr(ref, "IsBroken", False)),
+            })
+    except Exception as e:
+        snap["error"] = str(e)
+    return snap
+
+
 __all__ = ["attach_running_excel", "find_open_workbook", "open_disk_workbook",
-           "new_excel", "classify_com_failure", "read_vbproject_probe"]
+           "new_excel", "classify_com_failure", "read_vbproject_probe",
+           "read_project_references"]

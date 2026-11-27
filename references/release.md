@@ -16,7 +16,7 @@ python vba-workbench/scripts/sync.py doctor
   python -m unittest discover -s . -p "test_*.py"
   ```
 
-  当前基线 609 例（1 例按环境跳过）。
+  当前基线 626 例（1 例按环境跳过）。
 - 安装副本必须带 `scripts/make_lab_workbook.py`（不能依赖 `tests/`）：在安装目录跑一次
   `python scripts/sync.py version --json`（必须是单行 `sync.version` 信封）和
   `python scripts/sync.py init --project 临时 --lab --apply --json`（能生成空白工作簿；缺脚本才是
@@ -50,7 +50,7 @@ python tests/tools/make_release.py --apply
 `make_release.py --apply` 会算出 zip 的 SHA256，追加到 `releases/SHA256SUMS.txt`（同版本旧行先删），并把 `latest.txt` 写成当前文件名。要手工复核：
 
 ```
-certutil -hashfile releases\vba-workbench-1.7.0.zip SHA256
+certutil -hashfile releases\vba-workbench-1.7.1.zip SHA256
 ```
 
 交付时先发 `latest.txt` 指的那份，三份旧包并存容易拿错。

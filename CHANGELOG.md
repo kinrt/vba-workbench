@@ -2,7 +2,18 @@
 
 按「对外可见的行为变化」记；每条带日期与提交号（内部重构只在提交信息里写）。
 
-## 1.7.0 — 2026-11-27（开发中：真实环境验证前移）
+## 1.7.1 — 2026-11-27（已发布 public 快照：引用体检 / 四条 lint / 模块差异）
+
+**主题：从 12 项候选里只保留 T-03 引用体检、T-04 四条静态 lint、T-05 模块级差异报告，其余 9 项移出队列。**
+
+- **T-04 `audit lint`**：新增 `toolkit/vba_lint.py` 与 `features/audit_lint.py`，只做四条高置信规则：未使用局部变量、同作用域重复声明、`Function / Property Get` 未赋值返回、裸 `Range/Cells`（`With` 块内放行）。默认 warning 退 3，`--strict` 才 1；不做自动修复。
+- **T-03 `audit references`**：`excel_gateway.read_project_references` 只读返回引用名/GUID/版本/路径/是否损坏；`features/audit_references.py` 判 `ok/missing/broken` 并按类型前缀给轻量 `used_by`。表没开时隐藏实例只读打开，工程被锁退 3，不伪报业务失败。
+- **T-05 `sync diff`**：新增 `toolkit/vba_diff.py` 与 `features/sync_diff.py`，只读比较源码与工作簿模块，输出 `add/update/remove/same` 与过程级增删改；`remove` 只报告，不删除，`push` 也不自动删。
+- **文档收敛**：`TODO.md` §10 从 12 项改为 3 项；`references/vba-tool-integration.md` 压缩为三项方案；`references/audit.md` / `sync.md` 补章节；`commands.md` 由 manifest 重新生成（35 动词）。
+- **测试**：新增 `test_audit_lint.py` 7 例、`test_audit_references.py` 6 例、`test_sync_diff.py` 4 例；全量 `unittest discover` 626 例通过 / 1 skip / 0 failure（2026-11-27）；真实 `示例表` 已跑 `audit references` 与 `sync diff`，真实 `某业务表` 已跑 `audit lint`（25 条 warning，退出 3）。
+- **发布物**：`releases/vba-workbench-1.7.1.zip`，82 件 / 396,830 B，SHA256 `9d7a5bd7d011456623eeb1c42ec76d78bbce01fcd6166af3964c07fbf22122d7`；安装副本 82/82 对齐；public 快照已重建并推送 GitHub `main`（86 件，移除 `EVAL.md` / `evals/`）。
+
+## 1.7.0 — 2026-11-27（已发布 public 快照：真实环境验证前移）
 
 **主题：把 `audit -i` 菜单、`vbamod` 正文 diff 与 `assert` 看门狗接线收进 1.7；G-01 落 Excel golden 证据工具，G-03 已做真实 Excel MsgBox 与跨进程 PID，其余不可自动构造项如实登记 not_run。**
 

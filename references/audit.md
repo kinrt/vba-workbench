@@ -13,7 +13,7 @@
 
 - §1 为什么需要它
 - §2 用法（2.1 菜单 / 2.2 命令行）
-- §3 六个视角
+- §3 八个视角
 - §4 判定规则（4.1 成员引用 / 4.2 结构问题）
 - §5 输出长什么样
 - §6 已知局限
@@ -76,6 +76,8 @@ python vba-workbench\scripts\audit.py structure --json          :: 仅警告时�
 python vba-workbench\scripts\audit.py indicators --json
 python vba-workbench\scripts\audit.py overview --json           :: 只有阻断组退出 1；规则提醒默认 0，--strict 才 1
 python vba-workbench\scripts\audit.py overview --out 其他\全仓体检.md
+python vba-workbench\scripts\audit.py lint --project 示例表A --json
+python vba-workbench\scripts\audit.py references --project 示例表A --json
 ```
 
 开关（各视角通用）：
@@ -86,19 +88,19 @@ python vba-workbench\scripts\audit.py overview --out 其他\全仓体检.md
 | `--module 模块名`（`members` 必填） | 指定模块/类/窗体；也接受 `src` 下相对路径 |
 | `--exclude 关键字`（可重复） | 排除文件名含该关键字的源文件，如 `--exclude 测试` |
 | `--ignore 分组/指标`（可重复，也接受逗号） | 仅 `structure` / `indicators` / `overview` 有效。结构分组如 `manual_accel`、`binding_target`；指标如 `H05a,H06`。`members/common/project` 不接受该参数 |
-| `--strict` | 仅 `structure` / `indicators` / `overview` 有效：有警告时按失败 1 处理。`structure` / `indicators` 默认 3；`overview` 默认只对阻断组退 1，规则提醒默认 0 |
-| `--all` | members 列全部成员；common 展开每个模块明细；project 展开本工作簿专属模块明细 |
+| `--strict` | `structure` / `indicators` / `overview` / `lint` / `references` 有效：有警告时按失败 1 处理。前两者与 `lint` / `references` 默认 3；`overview` 默认只对阻断组退 1，规则提醒默认 0 |
+| `--all` | members 列全部成员；common 展开每个模块明细；project 展开本工作簿专属模块明细；`lint` 兼容但总是输出全部 |
 | `--md PATH` | 另存 Markdown 报告（UTF-8 无 BOM + LF） |
 | `--json` | stdout 只输出一行信封 JSON（`ok / action / details / errors / elapsed_ms / ts / stats / exit_code`）；**不打印可读文本和表格**，警告并入 `stats.warnings`。可读报告只在非 `--json` 模式输出；要留档用 `--out` |
 | `--out PATH` | 把同一份 JSON 落到文件（不再用 `--json -`） |
 | `--no-input` | 禁止提问，缺参数直接退出 2 |
-| `-i` | 交互菜单：选范围 / 分类 / 模块，跑六个视角，导出 Markdown；需要终端，管道里退出 1 |
+| `-i` | 交互菜单：选范围 / 分类 / 模块，跑原六个视角，导出 Markdown；需要终端，管道里退出 1。`lint` / `references` 目前只走命令行 |
 
-退出码：`0` 无异常；`1` 真异常 / 执行失败（`--strict` 下警告也归 1）；`2` 用法错；`3` 只读体检仅有警告（`structure` / `indicators`）。`overview` 默认只对阻断组（`sheet_mismatch` / `binding_target` / `dup` / `shadow`）退 1，`manual_accel` 等规则提醒只计数、不退 3。
+退出码：`0` 无异常；`1` 真异常 / 执行失败（`--strict` 下警告也归 1）；`2` 用法错；`3` 只读体检仅有警告（`structure` / `indicators` / `lint` / `references`）。`overview` 默认只对阻断组（`sheet_mismatch` / `binding_target` / `dup` / `shadow`）退 1，`manual_accel` 等规则提醒只计数、不退 3。
 
 ---
 
-## 3. 六个视角
+## 3. 八个视角
 
 | 视角 | 对象 | 输出 |
 |---|---|---|
@@ -108,11 +110,31 @@ python vba-workbench\scripts\audit.py overview --out 其他\全仓体检.md
 | `overview` | 公共库 + 全仓结构 | 上面两者的汇总 + **按影响排序的整体意见**，每条都带能直接跑的命令。公共库为空/未配置时仍出项目与结构总览（`stats.modules=0`、`stats.common_configured=false`），不整条失败 |
 | `structure` | 全仓源码结构 | 结构问题清单（旧副本/孤儿壳/壳类型/缺壳/重名/文档模块/旧规则回退） |
 | `indicators` | 指标体检 | 每项一条 `{id, title, status, detail, hint}`，`stats.passed / stats.warned` |
+| `lint --project P` | 项目源码 | 四条高置信规则：未使用局部变量、重复声明、函数未赋值返回、裸 `Range/Cells`；只读，默认 warning 退 3 |
+| `references --project P` | 工作簿 VBA 工程 | 每条引用的 `ok/missing/broken`、GUID/版本/路径、轻量 `used_by`；只读，默认 warning 退 3 |
 
 `common` 要求有可盘模块；没有时按只读警告退出 3（`ok=true`、`stats.configured=false`），打印 `common_dir` 与配置键 `defaults.common_dir`，不伪装成代码失败；`overview` 不以“公共库未配置”失败，仍输出项目与结构总览。
 
 `common` 会额外标出**版本常量模块**（按严格正则 `VERSION_RE` 判定：必须是 `COMMON_VERSION = "x.y.z"` 形式的常量声明，如 `CommonVersion.bas`；注释或字符串里提到不算）：
 它零外部引用也不能退出公共库，因为 `sync.py version` 要读它。
+
+### lint
+
+```bat
+python vba-workbench\scripts\audit.py lint --project 示例表A --json
+python vba-workbench\scripts\audit.py lint --project 示例表A --strict --md 其他\lint.md
+```
+
+四条规则固定：`L01_UNUSED_LOCAL`、`L02_DUPLICATE_DECL`、`L03_MISSING_RETURN`、`L04_UNQUALIFIED_RANGE_CELLS`。规则实现在 `toolkit/vba_lint.py`，`features/audit_lint.py` 只做项目枚举与出口。命中默认 warning 退 3，`--strict` 才 1；不做自动修复。
+
+### references
+
+```bat
+python vba-workbench\scripts\audit.py references --project 示例表A --json
+python vba-workbench\scripts\audit.py references --project 示例表A --md 其他\引用体检.md
+```
+
+只读读取工作簿 `VBProject.References`；表没开时用隐藏实例只读打开自己的副本，读完关闭。状态：`ok` / `missing` / `broken`。工程被锁或信任中心未放行时 `stats.readable=false`、退出 3，不伪报业务失败。`used_by` 是按类型前缀扫源码的轻量提示，不是硬判定。
 
 ---
 
